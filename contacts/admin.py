@@ -1,11 +1,16 @@
 from django.contrib import admin
-from clientes.models import Cliente
+from contacts.models import Contact
 
 
 # Register your models here.
-@admin.register(Cliente)
+@admin.register(Contact)
 class Clientes(admin.ModelAdmin):
-    list_display = ["name", "surname", "phone", "job_title",]
+    list_display = [
+        "name",
+        "surname",
+        "phone",
+        "job_title",
+    ]
     search_fields = [
         "name",
         "job_title",

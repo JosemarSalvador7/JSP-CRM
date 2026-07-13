@@ -4,7 +4,7 @@ from django.db.models.functions import Now
 
 
 # Create your models here.
-class Cliente(models.Model):
+class Contact(models.Model):
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
