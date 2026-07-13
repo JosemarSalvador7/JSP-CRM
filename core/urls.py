@@ -9,5 +9,5 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
-    path("clientes/", include("clientes.urls")),
+    path("contactos/", include("contactos.urls")),
 )
