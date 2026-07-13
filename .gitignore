@@ -9,3 +9,6 @@ wheels/
 # Virtual environments
 .venv
 media/perfil/*
+locale/*
+*.sqlite3
+*.db

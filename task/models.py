@@ -20,9 +20,9 @@ class Task(models.Model):
             ("DONE", "DONE"),
         ),
     )
-    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL)
+    assigned_to = models.ForeignKey(User, null=True, blank=True,on_delete=models.SET_NULL)
     contact = models.ForeignKey(
-        Contact, null=True, blank=True, on_delete=models.SET_NULL
+        Contact, null=True, blank=True, on_delete=models.CASCADE
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField()

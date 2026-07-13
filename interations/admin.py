@@ -6,7 +6,3 @@ from interations.models import Interation
 @admin.register(Interation)
 class InterationModel(admin.ModelAdmin):
     search_fields = ["type"]
-    list_display = [
-        "type",
-        "date",
-    ]
