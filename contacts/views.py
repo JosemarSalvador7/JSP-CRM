@@ -47,7 +47,7 @@ def add_contacts(requests):
     form = ContactForm()
     if requests.method == "POST":
         form = ContactForm(requests.POST)
-        print('entrou')
+        
         if form.is_valid():
             form_add = form.save(commit=False)
             form_add.created_by = requests.user
