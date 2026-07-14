@@ -12,3 +12,4 @@ media/perfil/*
 locale/*
 *.sqlite3
 *.db
+.ruff_cache

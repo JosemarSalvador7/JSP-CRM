@@ -20,37 +20,32 @@ Este projeto é um CRM simples desenvolvido com Django para gerenciar contatos, 
 - Pillow
 - pandas
 
-## Instalação
+## Instalação com UV
 
-1. Crie e ative um ambiente virtual:
+1. Crie e ative o ambiente virtual com UV:
    ```bash
-   python -m venv .venv
+   uv venv
    source .venv/bin/activate
    ```
 
-2. Instale as dependências:
-   ```bash
-   pip install -e .
-   ```
-
-   Se preferir usar o UV:
+2. Instale as dependências do projeto:
    ```bash
    uv sync
    ```
 
 3. Aplique as migrações:
    ```bash
-   python manage.py migrate
+   uv run python manage.py migrate
    ```
 
 4. Crie um superusuário:
    ```bash
-   python manage.py createsuperuser
+   uv run python manage.py createsuperuser
    ```
 
 5. Inicie o servidor:
    ```bash
-   python manage.py runserver
+   uv run python manage.py runserver
    ```
 
 ## Acesso
