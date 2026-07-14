@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from acconts.models import Profile
+from accounts.models import Profile
 
 
 # Register your models here.

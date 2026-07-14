@@ -10,4 +10,6 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path("contactos/", include("contacts.urls")),
+    path("accounts/", include("accounts.urls")),
+    path("dashboard/", include("dashboard.urls")),
 )

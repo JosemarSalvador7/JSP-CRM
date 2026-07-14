@@ -1,0 +1,43 @@
+{% extends 'accontbase.html' %} 
+{% load crispy_forms_tags %} 
+{% block page_title %}Login{% endblock page_title %}
+{% block content %} 
+{% if state == "1" %}
+<div class="alert alert-danger">
+  <p>Erro: Verifique o E-mail</p>
+</div>
+{% elif state == "2" %}
+<div class="alert alert-danger">
+  <p>Erro: Password é Insegura</p>
+</div>
+{% elif state == "0" %}
+<div class="alert alert-success">
+  <p>count created</p>
+</div>
+{% elif state == "5" %}
+<div class="alert alert-success">
+  <p>Conta Eliminada Com Sucesso</p>
+</div>
+{% endif %}
+<main
+  class="container mt-4"
+  style="align-items: center; justify-content: center; display: flex"
+>
+  <div class="border-4 p-4 shadow-lg text-white" style="width: 400px; border-radius: 10px">
+    <form action="{% url 'acconts:login' %}" method="POST" autocomplete="off">{% csrf_token %}
+    {% csrf_token %}
+      <h1 class="text-center">Login</h1>
+       {{form | crispy }}
+      <button type="submit" class="btn btn-success mb-3">Login</button>
+      <p class="text-center" style="font-size: small">
+        If you don't have any count click hire
+        <a
+          href="{% url 'acconts:register' %}"
+          style="color: blue; font-weight: 600; font-size: small"
+          >register</a
+        >
+      </p>
+    </form>
+  </div>
+</main>
+{% endblock content %}

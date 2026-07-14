@@ -1,0 +1,161 @@
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block page_title %}{% endblock page_title %}</title>
+    {% block head %}{% endblock head %}
+    <!-- Bootstrap 5 -->
+    <link
+      rel="stylesheet"
+      href="{% static '/bootstrap/css/bootstrap.min.css' %}"
+    />
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="{% static '/fontawesome/css/all.min.css' %}" />
+
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'base/css/main.css' %}" />
+  </head>
+  <body>
+    <!-- Overlay para mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- SIDEBAR EXPANSÍVEL -->
+    <aside class="dashboard-sidebar" id="dashboardSidebar">
+      <!-- Botão Toggle -->
+      <div
+        class="sidebar-toggle"
+        id="sidebarToggle"
+        data-bs-toggle="tooltip"
+        data-bs-placement="right"
+        title="Expandir/Recolher sidebar"
+      >
+        <i class="fas fa-chevron-left"></i>
+      </div>
+
+      <div class="sidebar-inner">
+        <!-- Brand -->
+        <div class="sidebar-brand">
+          <div class="brand-icon">
+        <i class="fa-solid fa-users"></i>
+          </div>
+          <div class="brand-text-wrapper">
+            <div class="brand-text">JSP CRM</div>
+            <div class="brand-sub">v1.0</div>
+          </div>
+        </div>
+
+        <!-- Navegação -->
+        <ul class="nav-menu">
+          <li class="nav-item-custom">
+            <a
+              href="{% url 'dashboard:home' %}"
+              class="nav-link-custom {% block dasboard_page %}{% endblock dasboard_page %}"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="Visão geral e análises"
+            >
+              <i class="fas fa-gauge-high"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+           <li class="nav-item-custom">
+            <a
+              href="{% url 'contacts:list' %}"
+              class="nav-link-custom {% block contact_page %} {% endblock contact_page %}"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="{% trans 'Contactos' %}"
+            >
+              <i class="fa-regular fa-address-book"></i>
+              <span>{% trans 'Contactos' %}</span>
+            </a>
+          </li>
+
+          <li class="nav-item-custom mt-3">
+            <a
+              href=""
+              class="nav-link-custom  {% block sobre_page %}{% endblock sobre_page %}"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="Sobre"
+            >
+             <i class="fa-solid fa-circle-info"></i>
+              <span>Sobre</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Footer do usuário -->
+        <div class="sidebar-footer">
+          <div
+            class="user-profile"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+            title="{{user.username}}"
+          >
+            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="user-info">
+              <div class="user-name">{{user.username | capfirst}}</div>
+              <div class="user-role">User</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-wrapper" id="mainWrapper">
+      <!-- Botão menu mobile -->
+      <button class="mobile-menu-btn mb-3" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+
+
+      <!-- Barra superior -->
+      <div class="dashboard-topbar">
+        <div class="page-title">
+          <h1>{% block title_page_body%}{% endblock title_page_body %}</h1>
+        </div>
+        <div class="header-actions">
+            {% comment %} <a
+            href="{% url 'profile' %}"
+              class="icon-btn"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              title="profile"
+            >
+              <i class="fas fa-user"></i>
+            </a> {% endcomment %}
+            <a
+              class="icon-btn text-danger"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              title="Logout"
+              href="{% url 'acconts:logout' %}"
+              style="text-decoration: none;"
+            >
+
+              <i class="fa-solid fa-arrow-right-from-bracket" ></i>
+            </a>
+          </div>
+        </div>
+
+
+      {% block content %} {% endblock content %}
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="{% static '/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static '/base/js/main.js' %}"></script>
+
+
+{% block extra_js %}
+{% endblock %}
+  </body>
+</html>

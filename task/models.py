@@ -5,12 +5,14 @@ from django.contrib.auth.models import User
 from django.db.models.functions import Now
 # Create your models here.
 
+
 class Task(models.Model):
     title = models.CharField
     description = models.TextField
     due_date = models.DateField
     priority = models.CharField(
-        max_length=30, choices=(("LOW", "LOW"), ("MEDIUM", "MEDIUM"), ("HIGH", "HIGH"))
+        max_length=30,
+        choices=(("LOW", "LOW"), ("MEDIUM", "MEDIUM"), ("HIGH", "HIGH")),
     )
     status = models.CharField(
         max_length=30,
@@ -19,15 +21,17 @@ class Task(models.Model):
             ("IN_PROGRESS", "IN_PROGRESS"),
             ("DONE", "DONE"),
         ),
+        default="PENDING",
     )
-    assigned_to = models.ForeignKey(User, null=True, blank=True,on_delete=models.SET_NULL)
+    assigned_to = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL
+    )
     contact = models.ForeignKey(
         Contact, null=True, blank=True, on_delete=models.CASCADE
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField()
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         self.updated_at = Now()
         super().save(*args, **kwargs)
-

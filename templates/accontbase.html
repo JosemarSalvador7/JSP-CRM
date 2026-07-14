@@ -1,0 +1,26 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!doctype html>
+<html lang="pt" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block page_title %}{% endblock page_title %}</title>
+    <link
+      rel="stylesheet"
+      href="{% static '/bootstrap/css/bootstrap.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static '/fontawesome/css/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static '/base/css/main.css' %}" />
+  </head>
+  <body class="bg-body-tertiary">
+    <header class="bg-body-tertiary">
+      <nav class="navbar container text-white">
+        <h1>My </h1>
+      </nav>
+    </header>
+    {% block content %} {% endblock content %}
+  </body>
+  <script src="{% static '/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static '/fontawesome/js/all.min.js' %}"></script>
+</html>

@@ -6,26 +6,60 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('contacts', '0001_initial'),
+        ("contacts", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Oppurtunity',
+            name="Oppurtunity",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('value', models.DecimalField(decimal_places=2, max_digits=15)),
-                ('stage', models.CharField(choices=[('PROSPECTING', 'PROSPECTING'), ('QUALIFICATION', 'QUALIFICATION'), ('PROPOSAL', 'PROPOSAL'), ('NEGOTIATION', 'NEGOTIATION'), ('CLOSED_WON', 'CLOSED_WON'), ('CLOSED_LOST', 'CLOSED_LOST')], max_length=50)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField()),
-                ('assigned_to', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('contact', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contacts.contact')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("value", models.DecimalField(decimal_places=2, max_digits=15)),
+                (
+                    "stage",
+                    models.CharField(
+                        choices=[
+                            ("PROSPECTING", "PROSPECTING"),
+                            ("QUALIFICATION", "QUALIFICATION"),
+                            ("PROPOSAL", "PROPOSAL"),
+                            ("NEGOTIATION", "NEGOTIATION"),
+                            ("CLOSED_WON", "CLOSED_WON"),
+                            ("CLOSED_LOST", "CLOSED_LOST"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField()),
+                (
+                    "assigned_to",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "contact",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="contacts.contact",
+                    ),
+                ),
             ],
         ),
     ]

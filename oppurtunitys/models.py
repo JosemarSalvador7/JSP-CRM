@@ -23,7 +23,7 @@ class Oppurtunity(models.Model):
         User, on_delete=models.SET_NULL, null=True, blank=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField()
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         self.updated_at = Now()

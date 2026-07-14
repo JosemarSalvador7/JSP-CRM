@@ -42,11 +42,11 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     # mine
     "contacts",
-    "acconts",
-    'interations',
+    "accounts",
+    "interations",
     "oppurtunitys",
-     'task'
-    
+    "task",
+    "dashboard",
 ]
 
 MIDDLEWARE = [

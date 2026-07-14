@@ -1,0 +1,43 @@
+{% extends 'accontbase.html' %}
+{% block page_title %}Register{% endblock page_title %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if state == "1" %}
+    <div class="alert alert-danger">
+      <p>Email unvalabel</p>
+    </div>
+{% elif state == "2" %}
+    <div class="alert alert-danger">
+      <p>Email empty</p>
+    </div>
+{% elif state == "3" %}
+    <div class="alert alert-danger">
+      <p>Password is empty or so sort (min length 8)</p>
+    </div>
+{% elif state == "4" %}
+    <div class="alert alert-danger">
+      <p>inputs empty</p>
+    </div>
+{% elif state == "5" %}
+    <div class="alert alert-danger">
+      <p> username empty</p>
+    </div>
+{% elif state == "6" %}
+    <div class="alert alert-danger">
+      <p>Username mast have only letters in your</p>
+    </div>
+{% endif %}
+<main class="container mt-4" style=" align-items: center; justify-content: center; display: flex;"  >
+  <div class="border-4 p-4 shadow-lg text-white" style="width: 400px; border-radius: 10px;">
+    <form action="{% url 'process_register' %}" method="POST" autocomplete="off">{% csrf_token %}
+      <h1 class="text-center">Register</h1>
+      {{form |crispy}}
+      <button type="submit" class="btn btn-success mb-2">send register</button>
+      <p style="font-size: small; text-align: center;">
+        if you already have any count click hire
+        <a href="{% url 'login' %}"  style="color: blue; font-weight: 600;">Login</a> 
+      </p>
+    </form>
+  </div>
+</main>
+{% endblock content %}

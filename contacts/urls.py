@@ -6,6 +6,6 @@ app_name = "contacts"
 
 
 urlpatterns = [
-    path("", views.home, name="home"),
+    path("list/", views.list_contacts, name="list"),
     path("pdf/", views.gerar_pdf, name="gerar_pdf"),
 ]
