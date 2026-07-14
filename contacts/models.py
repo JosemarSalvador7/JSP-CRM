@@ -9,7 +9,7 @@ class Contact(models.Model):
     surname = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
     email = models.EmailField(max_length=100, null=True, blank=True)
-    company = models.EmailField(max_length=100, null=True, blank=True)
+    company = models.CharField(max_length=100, null=True, blank=True)
     job_title = models.CharField(max_length=100, null=True, blank=True)
     address = models.TextField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)

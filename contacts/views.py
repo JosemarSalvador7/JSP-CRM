@@ -1,10 +1,9 @@
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render , redirect
 from django.http import FileResponse
 from fpdf import FPDF
 from io import BytesIO
 
-import contacts
 from contacts.form import ContactForm
 from contacts.filters import ContactFilter
 from contacts.models import Contact
@@ -30,9 +29,9 @@ def list_contacts(request):
     contacts_qs = Contact.objects.all()
     contact_filter = ContactFilter(request.GET, queryset=contacts_qs)
     filtered_contacts = contact_filter.qs
-    form = ContactForm()
+    
     context = {
-        'form': form,
+       
         'contactos': filtered_contacts,
         'filter': contact_filter,
         'contacts_count': filtered_contacts.count(),
@@ -41,3 +40,28 @@ def list_contacts(request):
         'contacts_with_company': filtered_contacts.filter(company__isnull=False).exclude(company='').count(),
     }
     return render(request, 'list_contacts.html', context)
+
+
+    
+def add_contacts(requests):
+    form = ContactForm()
+    if requests.method == "POST":
+        form = ContactForm(requests.POST)
+        print('entrou')
+        if form.is_valid():
+            form_add = form.save(commit=False)
+            form_add.created_by = requests.user
+            form.save()
+            return redirect('contacts:add')
+        else:
+            print('invalido',form.errors)
+    
+    return render(requests,'add_contacts.html',{
+         'form': form,
+    })
+    
+def delete_contacts(requests,id):
+    user = get_object_or_404(Contact,id=id)
+    user.delete()
+    return redirect('contacts:list')
+

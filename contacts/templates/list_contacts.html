@@ -70,7 +70,7 @@
         </div>
     </div>
     <div class="p-2">
-        <button class="btn bg-primary text-white">{% trans 'Adicionar Novo Contacto' %}</button>
+        <a href="{% url 'contacts:add' %}" class="btn bg-primary text-white">{% trans 'Adicionar Novo Contacto' %}</a>
     </div>
  </section>
 <section class='bg-light rounded-3 mt-3 p-3'>
@@ -124,7 +124,7 @@
                         <td>{{ contact.email|default_if_none:"Não informado" }}</td>
                         <td>{{ contact.company|default_if_none:"Não informado" }}</td>
                         <td>{{ contact.job_title|default_if_none:"Não informado" }}</td>
-                        <td><button class="btn btn-danger">eliminar</button>
+                        <td><a href="{% url 'contacts:delete' contact.pk %}" class="btn btn-danger">eliminar</a>
                         <button class="btn btn-primary">ver mais</button>
                     </td>
                     </tr>
