@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-13 07:41+0000\n"
+"POT-Creation-Date: 2026-07-15 16:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,76 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: clientes/templates/home.html:9
-msgid "Bom dia amigos"
-msgstr "Good mourning"
+#: contacts/templates/add_contacts.html:49
+msgid "Cadastrar Contacto"
+msgstr ""
 
-#: clientes/views.py:25
-msgid "TRADUCAO"
-msgstr "translation"
+#: contacts/templates/add_contacts.html:50
+msgid "Voltar"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:23
+msgid "Total Contactos"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:36
+msgid "Com Email"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:49
+msgid "Sem Email"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:62
+msgid "Com Empresa"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:73
+msgid "Adicionar Novo Contacto"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:99
+msgid "Filtrar"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:107
+msgid "Nome"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:108
+msgid "Sobrenome"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:109
+msgid "Telefone"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:110
+msgid "Email"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:111
+msgid "Empresa"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:112
+msgid "Cargo"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:113
+msgid "Acções"
+msgstr ""
+
+#: contacts/templates/list_contacts.html:133
+msgid "Nenhum contacto encontrado."
+msgstr ""
+
+#: templates/base.html:73 templates/base.html:76
+msgid "Contactos"
+msgstr ""
+
+#~ msgid "Bom dia amigos"
+#~ msgstr "Good mourning"
+
+#~ msgid "TRADUCAO"
+#~ msgstr "translation"

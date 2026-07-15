@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block contact_page %}active{% endblock contact_page %}
+
+{% block content %}
+<section class="bg-light p-3 rounded-2">
+    <!-- Cabeçalho com nome e botões -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mb-0">{{ contact.name|capfirst }} {{ contact.surname|capfirst }}</h1>
+        <div class="d-flex gap-2">
+            <a href="#" class="btn btn-primary">{% trans 'Editar' %}</a>
+            <a href="{% url 'contacts:delete' contact.pk %}" class="btn btn-danger " onclick="return confirm('{% trans "Tem certeza que deseja excluir este contato?" %}');">{% trans 'Excluir' %}</a>
+            <a href="{% url 'contacts:list' %}" class="btn btn-secondary">{% trans 'Voltar' %}</a>
+        </div>
+    </div>
+
+    <!-- Informações Pessoais -->
+    <h5 class="border-bottom pb-2 mb-3">{% trans "Informações Pessoais" %}</h5>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Nome" %}</label>
+            <p class="mb-0">{{ contact.name|capfirst }}</p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Sobrenome" %}</label>
+            <p class="mb-0">{{ contact.surname|capfirst }}</p>
+        </div>
+    </div>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Email" %}</label>
+            <p class="mb-0">
+                {% if contact.email %}
+                    {{ contact.email }}
+                {% else %}
+                    <span class="text-muted">{% trans "Não informado" %}</span>
+                {% endif %}
+            </p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Telefone" %}</label>
+            <p class="mb-0">{{ contact.phone }}</p>
+        </div>
+    </div>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Empresa" %}</label>
+            <p class="mb-0">
+                {% if contact.company %}
+                    {{ contact.company }}
+                {% else %}
+                    <span class="text-muted">{% trans "Não informado" %}</span>
+                {% endif %}
+            </p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Cargo" %}</label>
+            <p class="mb-0">
+                {% if contact.job_title %}
+                    {{ contact.job_title }}
+                {% else %}
+                    <span class="text-muted">{% trans "Não informado" %}</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Endereço -->
+    <h5 class="border-bottom pb-2 mb-3 mt-4">{% trans "Endereço" %}</h5>
+
+    <div class="mb-2">
+        <label class="text-muted small d-block">{% trans "Endereço" %}</label>
+        <p class="mb-0">
+            {% if contact.address %}
+                {{ contact.address|linebreaks }}
+            {% else %}
+                <span class="text-muted">{% trans "Não informado" %}</span>
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Cidade" %}</label>
+            <p class="mb-0">
+                {% if contact.city %}
+                    {{ contact.city }}
+                {% else %}
+                    <span class="text-muted">{% trans "Não informado" %}</span>
+                {% endif %}
+            </p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Estado" %}</label>
+            <p class="mb-0">
+                {% if contact.state %}
+                    {{ contact.state }}
+                {% else %}
+                    <span class="text-muted">{% trans "Não informado" %}</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "País" %}</label>
+            <p class="mb-0">
+                {% if contact.country %}
+                    {{ contact.country }}
+                {% else %}
+                    <span class="text-muted">{% trans "Não informado" %}</span>
+                {% endif %}
+            </p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Código Postal" %}</label>
+            <p class="mb-0">
+                {% if contact.postal_code %}
+                    {{ contact.postal_code }}
+                {% else %}
+                    <span class="text-muted">{% trans "Não informado" %}</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Informações do Sistema -->
+    <h5 class="border-bottom pb-2 mb-3 mt-4">{% trans "Informações do Sistema" %}</h5>
+
+    <div class="mb-2">
+        <label class="text-muted small d-block">{% trans "Atribuído ao/a" %}</label>
+        <p class="mb-0">{{ contact.assigned_to.get_full_name|default:contact.assigned_to.username }}</p>
+    </div>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Criado por" %}</label>
+            <p class="mb-0">{{ contact.created_by.get_full_name|default:contact.created_by.username }}</p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Criado em" %}</label>
+            <p class="mb-0">{{ contact.created_at|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
+
+    <div class="mb-2">
+        <label class="text-muted small d-block">{% trans "Última atualização" %}</label>
+        <p class="mb-0">{{ contact.updated_at|date:"d/m/Y H:i" }}</p>
+    </div>
+</section>
+{% endblock content %}

@@ -61,7 +61,14 @@ def add_contacts(requests):
     })
     
 def delete_contacts(requests,id):
-    user = get_object_or_404(Contact,id=id)
-    user.delete()
+    contact = get_object_or_404(Contact,id=id)
+    contact.delete()
     return redirect('contacts:list')
 
+
+def retrieve_contact(requests,id):
+    contact = get_object_or_404(Contact,id=id)
+    return render(requests,'retrieve_contact.html',{
+         'form': 1,
+         'contact':contact,
+    })

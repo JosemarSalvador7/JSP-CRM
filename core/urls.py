@@ -9,7 +9,7 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
-    path("contactos/", include("contacts.urls")),
+    path("contacts/", include("contacts.urls")),
     path("accounts/", include("accounts.urls")),
     path("dashboard/", include("dashboard.urls")),
 )

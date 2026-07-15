@@ -1,50 +1,54 @@
 {% extends "base.html" %}
-
+{% load i18n %}
+{% block contact_page %}active{% endblock contact_page %}
 {% block content %}
+
 <section class="bg-light p-2 rounded-2">
+    <h1 class="text-center mb-2">{% trans 'Cadastrar  Contacto' %} </h1>
     <form action="{% url 'contacts:add' %}" method="post" class="form-control-father">
         {% csrf_token %}
 
-        <div class="mb-3 d-flex" style="justify-content: space-between;">
+        <div class="mb-2 d-flex" style="justify-content: space-between;">
             <div class="w-50 me-2">{{ form.name.as_field_group }}</div>
             <div class="w-50 ms-2">{{ form.surname.as_field_group }}</div>
         </div>
 
-        <div class="mb-3 d-flex" style="justify-content: space-between;">
+        <div class="mb-2 d-flex" style="justify-content: space-between;">
             <div class="w-50 me-2">{{ form.email.as_field_group }}</div>
             <div class="w-50 ms-2">{{ form.phone.as_field_group }}</div>
         </div>
 
-        <div class="mb-3 d-flex" style="justify-content: space-between;">
+        <div class="mb-2 d-flex" style="justify-content: space-between;">
             <div class="w-50 me-2">{{ form.company.as_field_group }}</div>
             <div class="w-50 ms-2">{{ form.job_title.as_field_group }}</div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-2">
             <div style="max-height: 90px; overflow: hidden;">
                 {{ form.address.as_field_group }}
             </div>
         </div>
 
-        <div class="mb-3 d-flex" style="justify-content: space-between;">
+        <div class="mb-2 d-flex" style="justify-content: space-between;">
             <div class="w-50 me-2">{{ form.city.as_field_group }}</div>
             <div class="w-50 ms-2">{{ form.state.as_field_group }}</div>
         </div>
 
-        <div class="mb-3 d-flex" style="justify-content: space-between;">
+        <div class="mb-2 d-flex" style="justify-content: space-between;">
             <div class="w-50 me-2">{{ form.country.as_field_group }}</div>
             <div class="w-50 ms-2">{{ form.postal_code.as_field_group }}</div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-2">
             {{ form.assigned_to.as_field_group }}
         </div>
 
-        <div class="mb-3">
+        <div class="mb-2">
             {{ form.status.as_field_group }}
         </div>
 
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button type="submit" class="btn btn-primary">{% trans 'Cadastrar Contacto' %}</button>
+        <a href="{% url 'contacts:list' %}" class="btn  btn-success">{% trans 'Voltar' %}</a>
     </form>
 </section>
 {% endblock content %}
