@@ -69,10 +69,14 @@
             </div>
         </div>
     </div>
-    <div class="p-2">
-        <a href="{% url 'contacts:add' %}" class="btn bg-primary text-white">{% trans 'Adicionar Novo Contacto' %}</a>
-    </div>
- </section>
+</section>
+
+<div class="p-2">
+    <a href="{% url 'contacts:add' %}" class="btn bg-primary text-white">{% trans 'Adicionar Novo Contacto' %}</a>
+    <a href="{% url 'contacts:pdf' %}" class="btn btn-outline-danger ">{% trans 'Baixar Lista em pdf' %}</a>
+</div>
+
+
 <section class='bg-light rounded-3 mt-3 p-3'>
     <form method="get" class="row g-2 mb-3">
         <div class="col-md-2">
@@ -126,6 +130,7 @@
                         <td>{{ contact.job_title|default_if_none:"Não informado" }}</td>
                         <td><a href="{% url 'contacts:delete' contact.pk %}" class="btn btn-danger">eliminar</a>
                         <a href="{% url 'contacts:retrieve' contact.pk  %}" class="btn btn-primary">ver mais</a>
+                           <a href="{% url 'contacts:retrievepdf' contact.pk %}" class="btn btn-outline-danger">{% trans 'Baixar pdf' %}</a>
                     </td>
                     </tr>
 {% empty %}

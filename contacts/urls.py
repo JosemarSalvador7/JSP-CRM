@@ -10,5 +10,6 @@ urlpatterns = [
     path('add/',views.add_contacts,name='add'),
     path('delete/<int:id>/',views.delete_contacts,name='delete'),
     path('retrieve/<int:id>/',views.retrieve_contact,name='retrieve'),
-    path("pdf/", views.gerar_pdf, name="gerar_pdf"),
+    path("pdf/", views.gerar_pdf, name="pdf"),
+    path("pdf/<int:id>/", views.retrievepdf, name="retrievepdf"),
 ]

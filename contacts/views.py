@@ -7,9 +7,15 @@ from io import BytesIO
 from contacts.form import ContactForm
 from contacts.filters import ContactFilter
 from contacts.models import Contact
-# from clientes.models import Cliente
+
 # Create your views here.
 
+def retrievepdf(requets,id):
+    contact = get_object_or_404(Contact,id=id)
+    pdf = FPDF()
+    pdf.add_page()
+    pdf_contact = pdf.output(dest='S').encode('latin1') #type: ignore
+    return FileResponse(BytesIO(pdf_contact),filename=f'{contact.name} {contact.surname}')
 
 def gerar_pdf(requests):
     pdf = FPDF()
