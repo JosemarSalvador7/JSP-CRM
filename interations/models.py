@@ -19,3 +19,4 @@ class Interation(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.DO_NOTHING)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

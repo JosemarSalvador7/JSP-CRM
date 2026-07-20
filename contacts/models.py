@@ -23,11 +23,9 @@ class Contact(models.Model):
         User, on_delete=models.DO_NOTHING, related_name="clientes"
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
-        self.updated_at = Now()
-        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.name
