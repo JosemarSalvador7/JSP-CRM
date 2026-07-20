@@ -2,7 +2,6 @@ from django.db import models
 
 from contacts.models import Contact
 from django.contrib.auth.models import User
-from django.db.models.functions import Now
 # Create your models here.
 
 
@@ -31,4 +30,3 @@ class Task(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-

@@ -3,7 +3,6 @@ from multiprocessing import AuthenticationError
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 from django.db.transaction import atomic
 from accounts.forms import FormLogin
 from accounts.models import Profile

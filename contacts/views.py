@@ -1,5 +1,5 @@
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, render , redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import FileResponse
 from fpdf import FPDF
 from io import BytesIO
@@ -10,71 +10,196 @@ from contacts.models import Contact
 
 # Create your views here.
 
-def retrievepdf(requets,id):
-    contact = get_object_or_404(Contact,id=id)
-    pdf = FPDF()
-    pdf.add_page()
-    pdf_contact = pdf.output(dest='S').encode('latin1') #type: ignore
-    return FileResponse(BytesIO(pdf_contact),filename=f'{contact.name} {contact.surname}')
 
-def gerar_pdf(requests):
+def retrievepdf(requets, id):
+    contact = get_object_or_404(Contact, id=id)
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Times", "B", 16)
+    pdf.set_font("Times", "B", 24)
     pdf.set_fill_color(244, 244, 244)
     pdf.set_title("Lista de Clientes")
-    pdf.cell(w=85, h=30)  # type:ignore
-    pdf.cell(w=60, h=0, txt="Clientes", ln=1, align="c")  # type:ignore
+    pdf.cell(w=60, h=30)  # type:ignore
+    pdf.cell(
+        w=60,
+        h=0,
+        txt=f"{contact.name.capitalize()} {contact.surname.capitalize()}",
+        ln=1,
+        align="c",
+    )  # type:ignore assigned_to
     pdf.set_font("Times", "", 12)
-    pdf.cell(w=60, h=30, txt="", ln=1, align="c")  # type:ignore
+    pdf.cell(w=10, h=10, txt="", ln=1, align="c")  # type:ignore
+    pdf.set_font("Times", "B", 20)
+    pdf.cell(w=10, h=10, txt="Informações Pessoais", ln=1, align="c")
+    pdf.set_font("Times", "B", 12)
+    # Nome
+    pdf.cell(w=20, h=10, txt="Nome:", ln=0, align="c", )
+    pdf.set_font("Times", "", 12)
+    pdf.cell(w=20, h=10, txt=f"{contact.name.capitalize()}", ln=1, align="c")
+    # Sobrenome
+    pdf.set_font("Times", "B", 12)
+    pdf.cell(w=30, h=10, txt="Sobrenome:", ln=0, align="c", )
+    pdf.set_font("Times", "", 12)
+    pdf.cell(w=20, h=10, txt=f"{contact.surname.capitalize()}", ln=1)
+    # Telefone
+    pdf.set_font("Times", "B", 12)
+    pdf.cell(w=40, h=10, txt="Telefone:", ln=0, align="c", )
+    pdf.set_font("Times", "", 12)
+    pdf.cell(w=40, h=10, txt=f"{contact.phone}", ln=1, align="c")
+    # E-mail
+    pdf.set_font("Times", "B", 12)
+    pdf.cell(w=40, h=10, txt="E-mail:", ln=0, align="c", )
+    pdf.set_font("Times", "", 12)
+    pdf.cell(w=40, h=10, txt=f"{contact.email or 'Não informado'}", ln=1, align="c")
+    # Empresa
+    pdf.set_font("Times", "B", 12)
+    pdf.cell(w=40, h=10, txt="Empresa:", ln=0, )
+    pdf.set_font("Times", "", 12)
+    pdf.cell(
+        w=40,
+        h=10,
+        txt=f"{contact.company or 'Não informado'}",
+        ln=1,
+    )
+    pdf.set_font("Times", "B", 12)
+    # Cargo
+    pdf.cell(w=40, h=10, txt="Cargo:", ln=0, align="c", )
+    pdf.set_font("Times", "", 12)
+    pdf.cell(
+        w=40,
+        h=10,
+        txt=f"{contact.job_title or 'Não informado'}",
+        ln=1,
+        align="c",
+    )
+    # Vendedor Responsavel
+    pdf.set_font("Times", "B", 12)
+    pdf.cell(w=50, h=10, txt="Vendedor responsável:", ln=0, align="c", )
+    pdf.set_font("Times", "", 12)
+    pdf.cell(
+        w=40,
+        h=10,
+        txt=f"{contact.assigned_to or 'Não informado'}",
+        ln=1,
+        align="c",
+    )
+    pdf_contact = pdf.output(dest="S").encode("latin1")  # type: ignore
+    return FileResponse(
+        BytesIO(pdf_contact), filename=f"{contact.name} {contact.surname}.pdf"
+    )
+
+
+def gerar_pdf(requests):
+    contacts = Contact.objects.all()
+    pdf = FPDF()
+    pdf.add_page(orientation="landscape")
+    pdf.set_font("Times", "B", 24)
+    pdf.set_fill_color(244, 244, 244)
+    pdf.set_title("Lista de Clientes")
+    pdf.cell(w=120, h=30)  # type:ignore
+    pdf.cell(w=60, h=0, txt="Contactos", ln=1, align="c")  # type:ignore assigned_to
+    pdf.set_font("Times", "", 12)
+    pdf.cell(w=10, h=10, txt="", ln=1, align="c")  # type:ignore
+    pdf.cell(w=60, h=10, txt="Nome Completo", border=1, ln=0, align="c", fill=1)
+    pdf.cell(w=40, h=10, txt="Telefone", border=1, ln=0, align="c", fill=1)
+    pdf.cell(w=40, h=10, txt="E-mail", border=1, ln=0, align="c", fill=1)
+    pdf.cell(w=40, h=10, txt="Empresa", border=1, ln=0, align="c", fill=1)
+    pdf.cell(w=40, h=10, txt="Cargo", border=1, ln=0, align="c", fill=1)
+    pdf.cell(w=40, h=10, txt="Vendedor responsável", border=1, ln=1, align="c", fill=1)
+
+    for i in contacts:
+        pdf.cell(
+            w=60,
+            h=10,
+            txt=f"{i.name.capitalize()} {i.surname.capitalize()} ",
+            border=1,
+            ln=0,
+            align="c",
+        )
+        pdf.cell(w=40, h=10, txt=f"{i.phone}", border=1, ln=0, align="c")
+        pdf.cell(
+            w=40, h=10, txt=f"{i.email or 'Não informado'}", border=1, ln=0, align="c"
+        )
+        pdf.cell(
+            w=40, h=10, txt=f"{i.company or 'Não informado'}", border=1, ln=0, align="c"
+        )
+        pdf.cell(
+            w=40,
+            h=10,
+            txt=f"{i.job_title or 'Não informado'}",
+            border=1,
+            ln=0,
+            align="c",
+        )
+        pdf.cell(
+            w=40,
+            h=10,
+            txt=f"{i.assigned_to or 'Não informado'}",
+            border=1,
+            ln=1,
+            align="c",
+        )
+
     pdf_out = pdf.output(dest="S").encode("latin1")  # type:ignore
-    return FileResponse(BytesIO(pdf_out), filename="clientes.pdf")
+    return FileResponse(BytesIO(pdf_out), filename="contactos.pdf")
 
 
 def list_contacts(request):
     contacts_qs = Contact.objects.all()
     contact_filter = ContactFilter(request.GET, queryset=contacts_qs)
     filtered_contacts = contact_filter.qs
-    
+
     context = {
-       
-        'contactos': filtered_contacts,
-        'filter': contact_filter,
-        'contacts_count': filtered_contacts.count(),
-        'contacts_with_email': filtered_contacts.filter(email__isnull=False).exclude(email='').count(),
-        'contacts_without_email': filtered_contacts.filter(Q(email__isnull=True) | Q(email='')).count(),
-        'contacts_with_company': filtered_contacts.filter(company__isnull=False).exclude(company='').count(),
+        "contactos": filtered_contacts,
+        "filter": contact_filter,
+        "contacts_count": filtered_contacts.count(),
+        "contacts_with_email": filtered_contacts.filter(email__isnull=False)
+        .exclude(email="")
+        .count(),
+        "contacts_without_email": filtered_contacts.filter(
+            Q(email__isnull=True) | Q(email="")
+        ).count(),
+        "contacts_with_company": filtered_contacts.filter(company__isnull=False)
+        .exclude(company="")
+        .count(),
     }
-    return render(request, 'list_contacts.html', context)
+    return render(request, "list_contacts.html", context)
 
 
-    
 def add_contacts(requests):
     form = ContactForm()
     if requests.method == "POST":
         form = ContactForm(requests.POST)
-        
+
         if form.is_valid():
             form_add = form.save(commit=False)
             form_add.created_by = requests.user
             form.save()
-            return redirect('contacts:add')
+            return redirect("contacts:add")
         else:
-            print('invalido',form.errors)
-    
-    return render(requests,'add_contacts.html',{
-         'form': form,
-    })
-    
-def delete_contacts(requests,id):
-    contact = get_object_or_404(Contact,id=id)
+            print("invalido", form.errors)
+
+    return render(
+        requests,
+        "add_contacts.html",
+        {
+            "form": form,
+        },
+    )
+
+
+def delete_contacts(requests, id):
+    contact = get_object_or_404(Contact, id=id)
     contact.delete()
-    return redirect('contacts:list')
+    return redirect("contacts:list")
 
 
-def retrieve_contact(requests,id):
-    contact = get_object_or_404(Contact,id=id)
-    return render(requests,'retrieve_contact.html',{
-         'form': 1,
-         'contact':contact,
-    })
+def retrieve_contact(requests, id):
+    contact = get_object_or_404(Contact, id=id)
+    return render(
+        requests,
+        "retrieve_contact.html",
+        {
+            "form": 1,
+            "contact": contact,
+        },
+    )

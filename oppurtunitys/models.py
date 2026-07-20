@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from contacts.models import Contact
-from django.db.models.functions import Now
 
 
 #  PROSPECTING, QUALIFICATION, PROPOSAL, NEGOTIATION, CLOSED_WON, CLOSED_LOST
