@@ -1,8 +1,8 @@
 from django.contrib import admin
-from interations.models import Interation
+from interations.models import Interaction
 
 
 # Register your models here.
-@admin.register(Interation)
-class InterationModel(admin.ModelAdmin):
+@admin.register(Interaction)
+class InteractionModel(admin.ModelAdmin):
     search_fields = ["type"]

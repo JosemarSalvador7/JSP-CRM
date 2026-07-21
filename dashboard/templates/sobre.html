@@ -1,0 +1,47 @@
+<!--/caminho/sobre -->
+{% extends "base.html" %}
+{% load static %}
+{% block sobre_page %} active{% endblock sobre_page %}
+{% block page_title %}Sobre{% endblock page_title %}
+{% block title_page_body %}Sobre{% endblock title_page_body %}
+{% block head %}
+<link rel="stylesheet" href="{% static '/sobre/main.css' %} ">
+{% endblock head %}
+{% block content %}
+
+</div>
+<section>
+
+<p class="text-white">O caminho uma aplicação que vem aumentar ao máximo a sua produtividade
+     e dar um controlo melhor e mais acertivo para a suas actividades diarias e 
+     ter um controle da sua vida hoje e prepecivar como ela estará daqui, usando 
+     dados e informações provinientes de um bom controle.
+</p>
+<div class="text-white">
+    
+    <h2>Conheça O desenvolvedor</h2>
+    <p>João Salvador Paulo <strong>Tecnico Médio de Informática</strong> Programador <em>Python Fullstack + Django</em></p>
+    <p>Um dos Fundadores das Startups <a href="https://jeeldevs.site" class="" target="_blank">Jeeldevs</a> e <strong>Hupper Code</strong> </p>
+</div>
+<section class='picture-container'>
+<div class="profile">
+    <figure>
+        <img src="{% static '/sobre/img/profile.png' %}" alt="João Salvador Paulo" class="picture">
+    </figure>
+    <p class="text-white">Seja bem vindo au meu LinkTree</p>
+    <a href="https://github.com/JosemarSalvador7/" target="_blank" class="github">
+        <i class="fa-brands fa-github"></i>
+        <p>Github</p>
+    </a>
+    <a href="https://www.linkedin.com/in/joao-salvador-paulo/"  target="_blank" class="linkedin">
+        <i class="fa-brands fa-linkedin"></i>
+        <p>LinkedIn</p>
+    </a>
+    <a href="https://mailto:josemarsalvador2027@gmail.com" class="email" target="_blank">
+       <i class="fa-solid fa-envelope"></i>
+       <p>josemarsalvador2027@gmail.com</p>
+    </a>
+</div>
+
+</section>
+{% endblock %}

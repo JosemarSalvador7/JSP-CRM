@@ -6,3 +6,6 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url="acconts:logout")
 def home_view(requests):
     return render(requests, "home.html", {})
+
+def sobre_view(requests):
+    return render(requests, "sobre.html", {})

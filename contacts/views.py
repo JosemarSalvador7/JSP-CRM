@@ -1,12 +1,16 @@
+from email import message
+import re
+
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import FileResponse
 from fpdf import FPDF
 from io import BytesIO
-
+from django.contrib import messages
 from contacts.form import ContactForm
 from contacts.filters import ContactFilter
 from contacts.models import Contact
+from django.utils.translation import gettext_lazy as _
 
 # Create your views here.
 
@@ -49,7 +53,7 @@ def retrievepdf(requets, id):
     pdf.set_font("Times", "B", 12)
     pdf.cell(w=40, h=10, txt="E-mail:", ln=0, align="c", )
     pdf.set_font("Times", "", 12)
-    pdf.cell(w=40, h=10, txt=f"{contact.email or 'Não informado'}", ln=1, align="c")
+    pdf.cell(w=40, h=10, txt=f"{contact.email or _('Não informado')}", ln=1, align="c")
     # Empresa
     pdf.set_font("Times", "B", 12)
     pdf.cell(w=40, h=10, txt="Empresa:", ln=0, )
@@ -57,7 +61,7 @@ def retrievepdf(requets, id):
     pdf.cell(
         w=40,
         h=10,
-        txt=f"{contact.company or 'Não informado'}",
+        txt=f"{contact.company or _('Não informado')}",
         ln=1,
     )
     pdf.set_font("Times", "B", 12)
@@ -67,7 +71,7 @@ def retrievepdf(requets, id):
     pdf.cell(
         w=40,
         h=10,
-        txt=f"{contact.job_title or 'Não informado'}",
+        txt=f"{contact.job_title or _('Não informado')}",
         ln=1,
         align="c",
     )
@@ -78,7 +82,7 @@ def retrievepdf(requets, id):
     pdf.cell(
         w=40,
         h=10,
-        txt=f"{contact.assigned_to or 'Não informado'}",
+        txt=f"{contact.assigned_to or _('Não informado')}",
         ln=1,
         align="c",
     )
@@ -117,15 +121,15 @@ def gerar_pdf(requests):
         )
         pdf.cell(w=40, h=10, txt=f"{i.phone}", border=1, ln=0, align="c")
         pdf.cell(
-            w=40, h=10, txt=f"{i.email or 'Não informado'}", border=1, ln=0, align="c"
+            w=40, h=10, txt=f"{i.email or _('Não informado')}", border=1, ln=0, align="c"
         )
         pdf.cell(
-            w=40, h=10, txt=f"{i.company or 'Não informado'}", border=1, ln=0, align="c"
+            w=40, h=10, txt=f"{i.company or _('Não informado')}", border=1, ln=0, align="c"
         )
         pdf.cell(
             w=40,
             h=10,
-            txt=f"{i.job_title or 'Não informado'}",
+            txt=f"{i.job_title or _('Não informado')}",
             border=1,
             ln=0,
             align="c",
@@ -133,7 +137,7 @@ def gerar_pdf(requests):
         pdf.cell(
             w=40,
             h=10,
-            txt=f"{i.assigned_to or 'Não informado'}",
+            txt=f"{i.assigned_to or _('Não informado')}",
             border=1,
             ln=1,
             align="c",
@@ -174,9 +178,11 @@ def add_contacts(requests):
             form_add = form.save(commit=False)
             form_add.created_by = requests.user
             form.save()
-            return redirect("contacts:add")
+            messages.success(requests,_('Contacto Adicionado com sucesso'))
+            return redirect("contacts:list")
         else:
-            print("invalido", form.errors)
+            messages.error(requests,_('Erro a adicionar Contacto'))
+            return redirect("contacts:list")
 
     return render(
         requests,
@@ -190,10 +196,12 @@ def add_contacts(requests):
 def delete_contacts(requests, id):
     contact = get_object_or_404(Contact, id=id)
     contact.delete()
+    messages.success(requests,_('Contacto Eliminado com sucesso'))
     return redirect("contacts:list")
 
 
 def retrieve_contact(requests, id):
+  
     contact = get_object_or_404(Contact, id=id)
     return render(
         requests,
@@ -203,3 +211,26 @@ def retrieve_contact(requests, id):
             "contact": contact,
         },
     )
+
+def update_contact(requests,id):
+    contact = get_object_or_404(Contact,id=id)
+    if requests.method == "POST":
+    
+        form = ContactForm(requests.POST,instance=contact)
+        if  form.is_valid():
+            form.save()
+            messages.success(requests,_('Editado com sucesso'))
+            return redirect(f'/pt/contacts/retrieve/{id}')
+        messages.error(requests,_('Erro a Editar Contacto'))
+        return redirect(f'/pt/contacts/retrieve/{id}')
+    return render(
+        requests,
+        "update_contact.html",
+        {
+            "form": ContactForm(instance=contact),
+            "contact": contact,
+        },
+    )
+    
+        
+    

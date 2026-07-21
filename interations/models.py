@@ -5,7 +5,7 @@ from contacts.models import Contact
 
 
 # Create your models here.
-class Interation(models.Model):
+class Interaction(models.Model):
     interaction_choices = (
         ("C", "CALL"),
         ("E", "EMAIL"),
@@ -20,3 +20,7 @@ class Interation(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.type_interaction + " | " + self.contact.name
+    

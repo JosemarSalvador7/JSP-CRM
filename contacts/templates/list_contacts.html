@@ -125,7 +125,7 @@
                         <td>{{ contact.name }}</td>
                         <td>{{ contact.surname }}</td>
                         <td>{{ contact.phone }}</td>
-                        <td>{{ contact.email|default_if_none:"Não informado" }}</td>
+                        <td>{{ contact.email|default_if_none:"Não informado"}}</td>
                         <td>{{ contact.company|default_if_none:"Não informado" }}</td>
                         <td>{{ contact.job_title|default_if_none:"Não informado" }}</td>
                         <td><a href="{% url 'contacts:delete' contact.pk %}" class="btn btn-danger">eliminar</a>
