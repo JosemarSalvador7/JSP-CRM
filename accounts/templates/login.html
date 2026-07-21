@@ -1,7 +1,7 @@
-{% extends 'accontbase.html' %} 
-{% load crispy_forms_tags %} 
+{% extends 'accontbase.html' %}
+{% load crispy_forms_tags %}
 {% block page_title %}Login{% endblock page_title %}
-{% block content %} 
+{% block content %}
 {% if state == "1" %}
 <div class="alert alert-danger">
   <p>Erro: Verifique o E-mail</p>
@@ -29,14 +29,14 @@
       <h1 class="text-center">Login</h1>
        {{form | crispy }}
       <button type="submit" class="btn btn-success mb-3">Login</button>
-      <p class="text-center" style="font-size: small">
+      {% comment %} <p class="text-center" style="font-size: small">
         If you don't have any count click hire
         <a
           href="{% url 'acconts:register' %}"
           style="color: blue; font-weight: 600; font-size: small"
           >register</a
         >
-      </p>
+      </p> {% endcomment %}
     </form>
   </div>
 </main>
