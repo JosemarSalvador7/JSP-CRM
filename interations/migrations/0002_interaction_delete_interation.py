@@ -6,28 +6,58 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('contacts', '0004_alter_contact_updated_at'),
-        ('interations', '0001_initial'),
+        ("contacts", "0004_alter_contact_updated_at"),
+        ("interations", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Interaction',
+            name="Interaction",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type_interaction', models.CharField(choices=[('C', 'CALL'), ('E', 'EMAIL'), ('M', 'MEETING'), ('O', 'OTHER')], max_length=50)),
-                ('date_time', models.DateTimeField()),
-                ('description', models.TextField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('contact', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='contacts.contact')),
-                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "type_interaction",
+                    models.CharField(
+                        choices=[
+                            ("C", "CALL"),
+                            ("E", "EMAIL"),
+                            ("M", "MEETING"),
+                            ("O", "OTHER"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
+                ("date_time", models.DateTimeField()),
+                ("description", models.TextField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "contact",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        to="contacts.contact",
+                    ),
+                ),
+                (
+                    "created_by",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.DeleteModel(
-            name='Interation',
+            name="Interation",
         ),
     ]
