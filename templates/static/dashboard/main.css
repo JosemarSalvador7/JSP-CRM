@@ -1,0 +1,67 @@
+.profile {
+  background-color: rgb(25, 42, 67);
+  text-align: center;
+  width: 400px;
+  max-width: 800px;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 500;
+}
+
+.picture {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border-color: 1px solid rgb(0, 105, 251);
+
+  p{
+    font-size: 10em;
+  }
+}
+
+.picture-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+}
+
+.picture-container a {
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: #12121275;
+  margin: 10px 0;
+  border-radius: 8px;
+  font-size: 1.2em;
+
+  p,
+  i {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+.email {
+      justify-content: space-between;
+      align-items: center;
+}
+
+.picture-container .github:hover{
+    color: red;
+    transition: 0.5s;
+    transform: scale(1.05);
+}
+.picture-container .email:hover{
+    color: rgb(21, 0, 255);
+    transition: 0.5s;
+    transform: scale(1.05);
+}
+.picture-container .linkedin:hover{
+    color: rgb(21, 0, 255);
+    transition: 0.5s;
+    transform: scale(1.05);
+}

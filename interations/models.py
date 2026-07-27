@@ -22,4 +22,4 @@ class Interaction(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.type_interaction + " | " + self.contact.name
+        return self.type_interaction + "|" + self.contact.name

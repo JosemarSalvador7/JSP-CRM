@@ -5,7 +5,6 @@
 
 {% block content %}
 {% comment %} Context :users {% endcomment %}
-
 <!-- Stats Cards Section -->
 <section class="container mt-4">
     <div class="row g-3 mb-4">
@@ -180,32 +179,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for user in users %}
+                    {% for user_sys in users %}
                     <tr>
                         <td>
-                            {% if user.profile.avatar %}
-                            <img src="{{ user.profile.avatar.url }}" alt="{% trans 'Avatar de' %} {{ user.username }}" 
+                            {% if user_sys.profile.avatar %}
+                            <img src="{{ user_sys.profile.avatar.url }}" alt="{% trans 'Avatar de' %} {{ user_sys.username }}" 
                                  class="avatar-circle">
                             {% else %}
                             <div class="avatar-placeholder">
-                                {{ user.username|first|upper }}
+                                {{ user_sys.username|first|upper }}
                             </div>
                             {% endif %}
                         </td>
                         <td>
-                            <strong>{{ user.username }}</strong>
-                            {% if user.is_staff %}
+                            <strong>{{ user_sys.username }}</strong>
+                            {% if user_sys.is_staff %}
                             <span class="badge bg-primary ms-1">{% trans 'Admin' %}</span>
                             {% endif %}
                         </td>
-                        <td>{{ user.get_full_name|default:_("Não informado") }}</td>
-                        <td>{{ user.email|default:_("Não informado") }}</td>
+                        <td>{{ user_sys.get_full_name|default:_("Não informado") }}</td>
+                        <td>{{ user_sys.email|default:_("Não informado") }}</td>
                         <td>
-                            {% if user.profile.role == 'V' %}
+                            {% if user_sys.profile.role == 'V' %}
                             <span class="status-badge role-seller">
                                 <i class="fa-solid fa-user-tie"></i> {% trans 'Vendedor' %}
                             </span>
-                            {% elif user.profile.role == 'G' %}
+                            {% elif user_sys.profile.role == 'G' %}
                             <span class="status-badge role-manager">
                                 <i class="fa-solid fa-user-gear"></i> {% trans 'Gerente' %}
                             </span>
@@ -216,10 +215,10 @@
                             {% endif %}
                         </td>
                         <td>
-                            <code class="user-code">{{ user.profile.code|default:"---" }}</code>
+                            <code class="user-code">{{ user_sys.profile.code|default:"---" }}</code>
                         </td>
                         <td>
-                            {% if user.is_active %}
+                            {% if user_sys.is_active %}
                             <span class="status-badge status-active">
                                 <i class="fa-solid fa-circle-check"></i> {% trans 'Activo' %}
                             </span>
@@ -231,45 +230,49 @@
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <a href="{% url 'accounts:edit' user.id %}" 
+                                <a href="{% url 'accounts:edit' user_sys.id %}" 
                                    class="btn btn-warning btn-sm" 
-                                   aria-label="{% trans 'Editar' %} {{ user.username }}">
+                                   aria-label="{% trans 'Editar' %} {{ user_sys.username }}">
                                     <i class="fa-solid fa-pen"></i>
                                     <span class="d-none d-md-inline">{% trans 'Editar' %}</span>
                                 </a>
-                                {% if user != request.user %}
-                                <button type="button" 
-                                        class="btn btn-danger btn-sm" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#deleteModal{{ user.id }}"
-                                        aria-label="{% trans 'Eliminar' %} {{ user.username }}">
-                                    <i class="fa-solid fa-trash"></i>
-                                    <span class="d-none d-md-inline">{% trans 'Eliminar' %}</span>
-                                </button>
-                                {% endif %}
+
+                                  
+                                         {% if   request.user.profile.role == 'G' and user == request.user   %}
+                                        
+                                        <button type="button" 
+                                                class="btn btn-danger btn-sm" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal{{ user_sys.id }}"
+                                                aria-label="{% trans 'Eliminar' %} {{ user_sys.username }}">
+                                            <i class="fa-solid fa-trash"></i>
+                                            <span class="d-none d-md-inline">{% trans 'Eliminar' %}</span>
+                                        </button>
+                        
+                                    {% endif %}
                             </div>
 
                             <!-- Delete Confirmation Modal -->
-                            <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ user.id }}" aria-hidden="true">
+                            <div class="modal fade" id="deleteModal{{ user_sys.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ user_sys.id }}" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel{{ user.id }}">{% trans 'Confirmar Eliminação' %}</h5>
+                                            <h5 class="modal-title" id="deleteModalLabel{{ user_sys.id }}">{% trans 'Confirmar Eliminação' %}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>{% trans 'Tem a certeza que deseja eliminar o utilizador' %} <strong>{{ user.username }}</strong>?</p>
+                                            <p>{% trans 'Tem a certeza que deseja eliminar o utilizador' %} <strong>{{ user_sys.username }}</strong>?</p>
                                             <p class="text-danger small">{% trans 'Esta ação não pode ser desfeita.' %}</p>
-                                            {% if user.profile.role == 'G' %}
+                                            {% if user_sys.profile.role == 'G' %}
                                             <p class="text-warning small">{% trans 'Este utilizador é um Gerente.' %}</p>
                                             {% endif %}
-                                            {% if user.is_staff %}
+                                            {% if user_sys.is_staff %}
                                             <p class="text-warning small"> {% trans 'Este utilizador é administrador.' %}</p>
                                             {% endif %}
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans 'Cancelar' %}</button>
-                                            <a href="{% url 'accounts:delete' user.id %}" class="btn btn-danger">{% trans 'Eliminar' %}</a>
+                                            <a href="{% url 'accounts:delete' user_sys.id %}" class="btn btn-danger">{% trans 'Eliminar' %}</a>
                                         </div>
                                     </div>
                                 </div>

@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
+# media archive
 from django.conf.urls.static import static
 from django.conf import settings
+# internacionalization
 from django.conf.urls.i18n import i18n_patterns
 
 import dashboard

@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from fpdf import FPDF
 from accounts.forms import EditUserForm, FormLogin, RegisterUserForm
 from accounts.models import Profile
-
+from django.contrib.auth.decorators import login_required
 
 def login_view(requests):
     if requests.method == "POST":
@@ -25,11 +25,13 @@ def login_view(requests):
     return render(requests, "login.html", {"form": FormLogin})
 
 
+@login_required()
 def logout_view(requests):
     logout(requests)
     return redirect("accounts:login")
 
 
+@login_required()
 @atomic
 def register_view(requests):
     if requests.method == "POST":
@@ -45,6 +47,8 @@ def register_view(requests):
     return render(requests, "register.html", {"form": RegisterUserForm()})
 
 
+
+@login_required()
 def list_view(requests):
     users = User.objects.all()
     return render(
@@ -61,7 +65,7 @@ def list_view(requests):
         },
     )
 
-
+@login_required()
 @atomic
 def edit_view(requests, user_id):
     user = User.objects.get(id=user_id)
@@ -94,14 +98,18 @@ def edit_view(requests, user_id):
     )
 
 
-def delete_view(requests, user_id):
+@login_required()
+def delete_view(request, user_id):
     user = User.objects.get(id=user_id)
     username = user.username
+    if user.id == request.user.id: #type:ignore
+        messages.error(request,'Não Pode Apagar a sua Própria conta')
+        return redirect("accounts:list")
     user.delete()
-    messages.success(requests, _(f"Usuário {username} Eliminado Com Sucesso"))
+    messages.success(request, _(f"Usuário {username} Eliminado Com Sucesso"))
     return redirect("accounts:list")
 
-
+@login_required()
 def users_pdf_view(requets):
     pdf = FPDF()
     pdf.add_page(orientation="l")
