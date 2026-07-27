@@ -71,7 +71,7 @@
         <a href="{% url 'accounts:register' %}" class="btn bg-primary text-white">
             <i class="fa-solid fa-user-plus me-2"></i>{% trans 'Adicionar Novo Utilizador' %}
         </a>
-        <a href="" class="btn btn-outline-danger" target="_blank">
+        <a href="{% url 'accounts:pdf' %}" class="btn btn-outline-danger" target="_blank">
             <i class="fa-solid fa-file-pdf me-2"></i>{% trans 'Baixar Lista em PDF' %}
         </a>
     </div>
@@ -261,10 +261,10 @@
                                             <p>{% trans 'Tem a certeza que deseja eliminar o utilizador' %} <strong>{{ user.username }}</strong>?</p>
                                             <p class="text-danger small">{% trans 'Esta ação não pode ser desfeita.' %}</p>
                                             {% if user.profile.role == 'G' %}
-                                            <p class="text-warning small">⚠️ {% trans 'Este utilizador é um Gerente.' %}</p>
+                                            <p class="text-warning small">{% trans 'Este utilizador é um Gerente.' %}</p>
                                             {% endif %}
                                             {% if user.is_staff %}
-                                            <p class="text-warning small">⚠️ {% trans 'Este utilizador é administrador.' %}</p>
+                                            <p class="text-warning small"> {% trans 'Este utilizador é administrador.' %}</p>
                                             {% endif %}
                                         </div>
                                         <div class="modal-footer">

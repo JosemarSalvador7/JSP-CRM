@@ -4,6 +4,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 
+import dashboard
+import dashboard.views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -13,4 +16,5 @@ urlpatterns += i18n_patterns(
     path("accounts/", include("accounts.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("interactions/", include("interations.urls")),
+    path("", dashboard.views.home_view),
 )
