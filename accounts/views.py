@@ -1,6 +1,4 @@
 
-from multiprocessing import AuthenticationError
-
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -16,9 +14,9 @@ def login_view(requests):
         user = requests.POST.get("username")
         password = requests.POST.get("password")
         result = authenticate(requests, username=user, password=password)
-        print(result)
-        if not result:
-            raise AuthenticationError
+        if result is None:
+            messages.error(requests,_('Senha ou email ERRADO'))
+            return redirect('accounts:login')
         login(requests, user=result)
         return redirect("dashboard:home")
 
@@ -37,7 +35,6 @@ def register_view(requests):
         password = requests.POST.get("password")
         email = requests.POST.get("email")
         role = requests.POST.get("role")
-        
         user = User.objects.create_user(username=user, password=password, email=email)
         Profile.objects.create(user=user, role=role) #type: ignore 
         messages.success(requests, _("Usuario cadastrado com sucesso"))
@@ -64,9 +61,9 @@ def edit_view(requests, user_id):
         user.email = requests.POST.get("email") or user.email
         user.save()
         return redirect("accounts:list")
-    return render(requests, "editar.html", {"user": user})
+    return render(requests, "update_account.html", {"user": user})
 
 def delete_view(requests, user_id):
     user = User.objects.get(id=user_id)
     user.delete()
-    return redirect("acconts:listar")
+    return redirect("accounts:list")

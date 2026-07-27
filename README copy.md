@@ -44,20 +44,16 @@ uv sync
 ## Configuração e execução
 
 ```bash
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
+uv run manage.py migrate
+uv run manage.py createsuperuser
+uv run manage.py runserver
 ```
 
+## URLs úteis
 
 - Lista de utilizadores: `/accounts/list/`
 - Cadastro: `/accounts/register/`
 - Login: `/accounts/login/`
-
-## Próximos passos sugeridos
-
-- Implementar `accounts/filters.py` e ajustar `accounts.list_view` para usar `AccountFilter`
-- Preparar `requirements.txt` a partir do `pyproject.toml` se necessário
 
 ## Licença
 

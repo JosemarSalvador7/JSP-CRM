@@ -24,7 +24,7 @@
   style="align-items: center; justify-content: center; display: flex"
 >
   <div class="border-4 p-4 shadow-lg text-white" style="width: 400px; border-radius: 10px">
-    <form action="{% url 'acconts:login' %}" method="POST" autocomplete="off">{% csrf_token %}
+    <form action="{% url 'accounts:login' %}" method="POST" autocomplete="off">{% csrf_token %}
     {% csrf_token %}
       <h1 class="text-center">Login</h1>
        {{form | crispy }}
