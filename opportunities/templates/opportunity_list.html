@@ -14,7 +14,7 @@
                         <h6 class="card-subtitle text-muted">{% trans 'Total Oportunidades' %}</h6>
                         <h3 class="card-title mt-2">{{ total_count }}</h3>
                         <small class="text-muted">
-                            {% trans 'Valor Total' %}: R$ {{ total_value|floatformat:2 }}
+                            {% trans 'Valor Total' %}: KZ {{ total_value|floatformat:2 }}
                         </small>
                     </div>
                     <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
@@ -31,7 +31,7 @@
                     <div>
                         <h6 class="card-subtitle text-muted">{% trans 'Prospecção' %}</h6>
                         <h3 class="card-title mt-2">{{ stage_counts.PROSPECTING|default:0 }}</h3>
-                        <small class="text-muted">R$ {{ stage_values.PROSPECTING|default:0|floatformat:2 }}</small>
+                        <small class="text-muted">KZ {{ stage_values.PROSPECTING|default:0|floatformat:2 }}</small>
                     </div>
                     <div class="bg-secondary text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
                         <i class="fa-solid fa-magnifying-glass fs-4"></i>
@@ -47,7 +47,7 @@
                     <div>
                         <h6 class="card-subtitle text-muted">{% trans 'Qualificação' %}</h6>
                         <h3 class="card-title mt-2">{{ stage_counts.QUALIFICATION|default:0 }}</h3>
-                        <small class="text-muted">R$ {{ stage_values.QUALIFICATION|default:0|floatformat:2 }}</small>
+                        <small class="text-muted">KZ {{ stage_values.QUALIFICATION|default:0|floatformat:2 }}</small>
                     </div>
                     <div class="bg-info text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
                         <i class="fa-solid fa-check-circle fs-4"></i>
@@ -63,7 +63,7 @@
                     <div>
                         <h6 class="card-subtitle text-muted">{% trans 'Fechadas Ganhas' %}</h6>
                         <h3 class="card-title mt-2">{{ stage_counts.CLOSED_WON|default:0 }}</h3>
-                        <small class="text-muted">R$ {{ stage_values.CLOSED_WON|default:0|floatformat:2 }}</small>
+                        <small class="text-muted">KZ {{ stage_values.CLOSED_WON|default:0|floatformat:2 }}</small>
                     </div>
                     <div class="bg-success text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
                         <i class="fa-solid fa-trophy fs-4"></i>
@@ -134,7 +134,7 @@
                             {{ opp.name|capfirst }}
                         </a>
                     </td>
-                    <td>R$ {{ opp.value|floatformat:2 }}</td>
+                    <td>KZ {{ opp.value|floatformat:2 }}</td>
                     <td>
                         <span class="badge {% if opp.stage == 'PROSPECTING' %}bg-secondary{% elif opp.stage == 'QUALIFICATION' %}bg-info{% elif opp.stage == 'PROPOSAL' %}bg-warning{% elif opp.stage == 'NEGOTIATION' %}bg-primary{% elif opp.stage == 'CLOSED_WON' %}bg-success{% else %}bg-danger{% endif %}">
                             {{ opp.get_stage_display }}

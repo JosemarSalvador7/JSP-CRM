@@ -9,26 +9,26 @@
     <a href="{% url 'opportunities:list' %}" class="btn btn-secondary">{% trans 'Lista' %} <i class="fa-solid fa-list"></i></a>
 </div>
 
-<section class='bg-light rounded-3 mt-3 p-3'>
+<section class='bg-light rounded-3 mt-3 p-3' style="overflow-y: auto;">
     <h4 class="text-center mb-3">
         <i class="fa-solid fa-table-columns"></i> 
         {% trans 'Kanban - Oportunidades' %}
         <span class="badge bg-secondary ms-2">{{ total_opportunities }}</span>
     </h4>
     
-    <div class="row">
+    <div class="row" style="align-items: center; justify-content: center;">
         {% for stage_code, stage_data in kanban_data.items %}
-        <div class="col-12 col-md-6 col-lg-4 col-xl-2 mb-3">
-            <div class="card shadow-sm h-100">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-2 m-1" style="min-width: 500px;">
+            <div class="card shadow-sm h-100" >
                 <div class="card-header {% if stage_code == 'PROSPECTING' %}bg-secondary{% elif stage_code == 'QUALIFICATION' %}bg-info{% elif stage_code == 'PROPOSAL' %}bg-warning{% elif stage_code == 'NEGOTIATION' %}bg-primary{% elif stage_code == 'CLOSED_WON' %}bg-success{% else %}bg-danger{% endif %} text-white">
                     <h6 class="mb-0 text-center">
                         {{ stage_data.label }}
                         <br>
                         <span class="badge bg-light text-dark">{{ stage_data.count }}</span>
-                        <small class="d-block text-white-50">R$ {{ stage_data.total_value|floatformat:2 }}</small>
+                        <small class="d-block text-white-50">KZ {{ stage_data.total_value|floatformat:2 }}</small>
                     </h6>
                 </div>
-                <div class="card-body" style="min-height: 200px; max-height: 400px; overflow-y: auto;">
+                <div class="card-body" style="min-height: 200px; max-height: 400px; overflow-y: auto; ">
                     {% for opp in stage_data.opportunities %}
                     <div class="card mb-2 shadow-sm border-0">
                         <div class="card-body p-2">
@@ -39,7 +39,7 @@
                                     </a>
                                     <br>
                                     <small class="text-muted">
-                                        R$ {{ opp.value|floatformat:2 }}
+                                        KZ {{ opp.value|floatformat:2 }}
                                         <br>
                                         <i class="fa-solid fa-user"></i> {{ opp.contact.name|truncatechars:10 }}
                                     </small>
@@ -51,7 +51,7 @@
                                     {% if stage_code != 'CLOSED_WON' and stage_code != 'CLOSED_LOST' %}
                                     <form method="post" action="{% url 'opportunities:update_stage' opp.pk %}" class="d-inline">
                                         {% csrf_token %}
-                                        <select name="stage" class="form-select form-select-sm p-0" style="width: auto;" onchange="this.form.submit()">
+                                        <select name="stage" class="form-control form-select form-select-sm p-1" style="width: auto;" onchange="this.form.submit()">
                                             {% for code, label in stages.items %}
                                                 <option value="{{ code }}" {% if opp.stage == code %}selected{% endif %}>
                                                     {{ label }}

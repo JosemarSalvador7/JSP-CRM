@@ -62,7 +62,7 @@ class RegisterUserForm(UserForm): ...
 
 class EditUserForm(UserForm):
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
         label=_("Password"),
         min_length=8,
         required=False,
@@ -72,18 +72,20 @@ class EditUserForm(UserForm):
         required=False,
         label=_("Foto"),
         help_text=_("Mantenha o campo vazio para manter a foto atual."),
-        widget=forms.FileInput(attrs={'class': 'form-control'})
+        widget=forms.FileInput(attrs={"class": "form-control"}),
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['password'].required = False
-        
+        self.fields["password"].required = False
+
         # Adiciona classe form-control a todos os campos existentes
         for field_name, field in self.fields.items():
-            if field_name not in ['password', 'avatar']:
-                if hasattr(field.widget, 'attrs'):
-                    field.widget.attrs['class'] = 'form-control'
+            if field_name not in ["password", "avatar"]:
+                if hasattr(field.widget, "attrs"):
+                    field.widget.attrs["class"] = "form-control"
+
+
 class FormLogin(forms.ModelForm):
     class Meta:
         model = User

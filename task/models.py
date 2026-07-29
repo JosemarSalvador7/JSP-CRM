@@ -18,34 +18,42 @@ class Task(models.Model):
         ("DONE", "Concluída"),
     )
 
-    title = models.CharField(max_length=250)  # ❌ Estava faltando max_length
-    description = models.TextField()  # ❌ Estava faltando os parênteses
-    due_date = models.DateField()  # ❌ Estava faltando os parênteses
+    title = models.CharField(max_length=250, verbose_name="Título")
+    description = models.TextField(verbose_name="Descrição")
+    due_date = models.DateField(verbose_name="Data de Vencimento")
     priority = models.CharField(
         max_length=30,
         choices=PRIORITY_CHOICES,
-        default="MEDIUM",  # Adicionar valor padrão
+        default="MEDIUM",
+        verbose_name="Prioridade",
     )
     status = models.CharField(
-        max_length=30,
-        choices=STATUS_CHOICES,
-        default="PENDING",
+        max_length=30, choices=STATUS_CHOICES, default="PENDING", verbose_name="Status"
     )
     assigned_to = models.ForeignKey(
         User,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="tasks_assigned",  # Adicionar related_name
+        related_name="tasks_assigned",
+        verbose_name="Atribuído a",
     )
-    created_by = models.ForeignKey(  # Adicionar campo created_by
-        User, on_delete=models.CASCADE, related_name="tasks_created"
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="tasks_created",
+        verbose_name="Criado por",
     )
     contact = models.ForeignKey(
-        Contact, null=True, blank=True, on_delete=models.CASCADE, related_name="tasks"
+        Contact,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="tasks",
+        verbose_name="Contato",
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Criado em")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Atualizado em")
 
     def __str__(self):
         return self.title

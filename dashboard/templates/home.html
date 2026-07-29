@@ -90,7 +90,7 @@
                         <br>
                         <i class="fa-solid fa-trophy"></i> Ganhas: {{ closed_won_count }}
                         <br>
-                        <i class="fa-solid fa-circle-dollar"></i> R$ {{ total_opportunity_value|floatformat:2 }}
+                        <i class="fa-solid fa-circle-dollar"></i> KZ {{ total_opportunity_value|floatformat:2 }}
                     </small>
                 </div>
                 <div class="bg-warning text-dark rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
@@ -381,7 +381,7 @@
                             {% for opp in recent_opportunities %}
                             <tr>
                                 <td>{{ opp.name|capfirst }}</td>
-                                <td>R$ {{ opp.value|floatformat:2 }}</td>
+                                <td>KZ {{ opp.value|floatformat:2 }}</td>
                                 <td>
                                     <span class="badge {% if opp.stage == 'PROSPECTING' %}bg-secondary{% elif opp.stage == 'QUALIFICATION' %}bg-info{% elif opp.stage == 'PROPOSAL' %}bg-warning{% elif opp.stage == 'NEGOTIATION' %}bg-primary{% elif opp.stage == 'CLOSED_WON' %}bg-success{% else %}bg-danger{% endif %}">
                                         {{ opp.get_stage_display }}

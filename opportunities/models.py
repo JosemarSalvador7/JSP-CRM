@@ -36,7 +36,7 @@ class Opportunity(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name="Atribuído a",
+        verbose_name="Atribuído a/ao",
         related_name="opportunities_assigned",
     )
     created_by = models.ForeignKey(
