@@ -19,7 +19,9 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{% static 'base/css/main.css' %}" />
+
   </head>
+  
   <body>
     <!-- Overlay para mobile -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -83,7 +85,7 @@
               data-bs-placement="right"
               title="{% trans 'Interações' %}"
             >
-      <i class="fa-regular fa-message"></i>
+              <i class="fa-regular fa-message"></i>
               <span>{% trans 'Interações' %}</span>
             </a>
           </li>
@@ -99,10 +101,22 @@
               <span>{% trans 'Tarefas' %}</span>
             </a>
           </li>
+          <li class="nav-item-custom">
+            <a
+              href="{% url 'opportunities:list' %}"
+              class="nav-link-custom {% block opportunity_page %}{% endblock opportunity_page %}"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="{% trans 'Oportunidades' %}"
+            >
+              <i class="fa-solid fa-chart-line"></i>
+              <span>{% trans 'Oportunidades' %}</span>
+            </a>
+          </li>
           <li class="nav-item-custom mt-3">
             <a
               href="{% url 'accounts:list' %}"
-              class="nav-link-custom  {% block accounts_page %}{% endblock accounts_page %}"
+              class="nav-link-custom {% block accounts_page %}{% endblock accounts_page %}"
               data-bs-toggle="tooltip"
               data-bs-placement="right"
               title="Usuários"
@@ -111,10 +125,10 @@
               <span>{% trans 'Usuários' %}</span>
             </a>
           </li>
-          <li class="nav-item-custom mt-3">
+          <li class="nav-item-custom">
             <a
               href="{% url 'dashboard:sobre' %}"
-              class="nav-link-custom  {% block sobre_page %}{% endblock sobre_page %}"
+              class="nav-link-custom {% block sobre_page %}{% endblock sobre_page %}"
               data-bs-toggle="tooltip"
               data-bs-placement="right"
               title="Sobre"
@@ -127,38 +141,40 @@
 
         <!-- Footer do usuário -->
         <div class="sidebar-footer">
-          <div
-            class="user-profile"
-            data-bs-toggle="tooltip"
-            data-bs-placement="right"
-            title="{{ user.username }}"
-          >
-            <!-- Avatar do usuário -->
-            <div class="user-avatar">
-              {% if user.profile.avatar %}
-                <img 
-                  src="{{ user.profile.avatar.url }}" 
-                  alt="{% trans 'Avatar de' %} {{ user.username }}"
-                  class="user-avatar-img"
-                  style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
-                >
-              {% else %}
-                <i class="fa-solid fa-user"></i>
-              {% endif %}
-            </div>
-            <div class="user-info">
-              <div class="user-name">{{ user.username | capfirst }}</div>
-              <div class="user-role">
-                {% if user.profile.role == 'G' %}
-                  {% trans 'Gerente' %}
-                {% elif user.profile.role == 'V' %}
-                  {% trans 'Vendedor' %}
+          <a href="{% url 'accounts:profile' %}" class="text-decoration-none">
+            <div
+              class="user-profile"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="{% trans 'Meu Perfil' %}"
+            >
+              <!-- Avatar do usuário -->
+              <div class="user-avatar">
+                {% if user.profile.avatar %}
+                  <img 
+                    src="{{ user.profile.avatar.url }}" 
+                    alt="{% trans 'Avatar de' %} {{ user.username }}"
+                    class="user-avatar-img"
+                    style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
+                  >
                 {% else %}
-                  {% trans 'Utilizador' %}
+                  <i class="fa-solid fa-user"></i>
                 {% endif %}
               </div>
+              <div class="user-info">
+                <div class="user-name">{{ user.username | capfirst }}</div>
+                <div class="user-role">
+                  {% if user.profile.role == 'G' %}
+                    {% trans 'Gerente' %}
+                  {% elif user.profile.role == 'V' %}
+                    {% trans 'Vendedor' %}
+                  {% else %}
+                    {% trans 'Utilizador' %}
+                  {% endif %}
+                </div>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </aside>
@@ -176,39 +192,50 @@
           <h1>{% block title_page_body %}{% endblock title_page_body %}</h1>
         </div>
         <div class="header-actions">
-          <!-- Avatar do usuário na barra superior -->
-          <div class="user-avatar-topbar">
-            {% if user.profile.avatar %}
-              <img 
-                src="{{ user.profile.avatar.url }}" 
-                alt="{% trans 'Avatar de' %} {{ user.username }}"
-                style="width: 50px; height:50px; border-radius: 50%; object-fit: cover; cursor: pointer;"
-                data-bs-toggle="tooltip"
-                data-bs-placement="bottom"
-                title="{{ user.username }}"
-              >
-            {% else %}
-              <a
-                href="#"
-                class="icon-btn"
-                data-bs-toggle="tooltip"
-                data-bs-placement="bottom"
-                title="{{ user.username }}"
-              >
-                <i class="fas fa-user"></i>
-              </a>
-            {% endif %}
+          <!-- Dropdown do usuário com ícone de menu ao lado -->
+          <div class="dropdown d-flex align-items-center gap-2">
+            <!-- Avatar do usuário -->
+            <div class="user-avatar-topbar" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+              {% if user.profile.avatar %}
+                <img 
+                  src="{{ user.profile.avatar.url }}" 
+                  alt="{% trans 'Avatar de' %} {{ user.username }}"
+                  style="width: 40px; height:40px; border-radius: 50%; object-fit: cover;"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="{{ user.username }}"
+                >
+              {% else %}
+                <div class="icon-btn" style="width: 40px; height: 40px; border-radius: 50%; background: #0d6efd; color: white; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-user"></i>
+                </div>
+              {% endif %}
+            </div>
+            
+            <!-- Ícone de menu (seta para baixo) ao lado da imagem -->
+            <div class="dropdown-toggle-icon" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; color: #ffffff; font-size: 25px;">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                  <i class="fa-solid fa-user"></i> {% trans 'Meu Perfil' %}
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'accounts:profile_edit' %}">
+                  <i class="fa-solid fa-pen"></i> {% trans 'Editar Perfil' %}
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}">
+                  <i class="fa-solid fa-sign-out-alt"></i> {% trans 'Sair' %}
+                </a>
+              </li>
+            </ul>
           </div>
-          <a
-            class="icon-btn text-danger"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Logout"
-            href="{% url 'accounts:logout' %}"
-            style="text-decoration: none;"
-          >
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          </a>
         </div>
       </div>
 

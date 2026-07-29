@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "contacts",
     "accounts",
     "interations",
-    "oppurtunitys",
+    "opportunities",
     "task",
     "dashboard",
 ]

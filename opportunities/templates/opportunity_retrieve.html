@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block opportunity_page %}active{% endblock opportunity_page %}
+
+{% block content %}
+<section class="bg-light p-3 rounded-2">
+    <!-- Cabeçalho com botões -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mb-0">{{ opportunity.name|capfirst }}</h1>
+        <div class="d-flex gap-2">
+            <a href="{% url 'opportunities:retrievepdf' opportunity.pk %}" class="btn btn-outline-danger" target="_blank">{% trans 'PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
+            <a href="{% url 'opportunities:put' opportunity.pk %}" class="btn btn-primary">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
+            <a href="{% url 'opportunities:delete' opportunity.pk %}" class="btn btn-danger" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta oportunidade?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+            <a href="{% url 'opportunities:list' %}" class="btn btn-secondary">{% trans 'Voltar' %} <i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- Informações da Oportunidade -->
+    <h5 class="border-bottom pb-2 mb-3">{% trans "Informações da Oportunidade" %}</h5>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Nome" %}</label>
+            <p class="mb-0"><strong>{{ opportunity.name|capfirst }}</strong></p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Valor Estimado" %}</label>
+            <p class="mb-0"><strong>R$ {{ opportunity.value|floatformat:2 }}</strong></p>
+        </div>
+    </div>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Estágio" %}</label>
+            <p class="mb-0">
+                <span class="badge {% if opportunity.stage == 'PROSPECTING' %}bg-secondary{% elif opportunity.stage == 'QUALIFICATION' %}bg-info{% elif opportunity.stage == 'PROPOSAL' %}bg-warning{% elif opportunity.stage == 'NEGOTIATION' %}bg-primary{% elif opportunity.stage == 'CLOSED_WON' %}bg-success{% else %}bg-danger{% endif %} fs-6">
+                    {{ opportunity.get_stage_display }}
+                </span>
+            </p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Atribuído a" %}</label>
+            <p class="mb-0">{{ opportunity.assigned_to.get_full_name|default:opportunity.assigned_to.username|default:"Não atribuído" }}</p>
+        </div>
+    </div>
+
+    <div class="mb-2">
+        <label class="text-muted small d-block">{% trans "Contato" %}</label>
+        <p class="mb-0">
+            <a href="{% url 'contacts:retrieve' opportunity.contact.pk %}" class="text-decoration-none">
+                <i class="fa-solid fa-user"></i>
+                {{ opportunity.contact.name|capfirst }} {{ opportunity.contact.surname|capfirst }}
+            </a>
+            <br>
+            <small class="text-muted">
+                <i class="fa-solid fa-phone"></i> {{ opportunity.contact.phone }}
+                {% if opportunity.contact.email %}
+                    | <i class="fa-solid fa-envelope"></i> {{ opportunity.contact.email }}
+                {% endif %}
+            </small>
+        </p>
+    </div>
+
+    <!-- Informações do Sistema -->
+    <h5 class="border-bottom pb-2 mb-3 mt-4">{% trans "Informações do Sistema" %}</h5>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Criado por" %}</label>
+            <p class="mb-0">
+                <i class="fa-solid fa-user-circle"></i>
+                {{ opportunity.created_by.get_full_name|default:opportunity.created_by.username }}
+            </p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Criado em" %}</label>
+            <p class="mb-0">
+                <i class="fa-regular fa-calendar-plus"></i>
+                {{ opportunity.created_at|date:"d/m/Y H:i" }}
+            </p>
+        </div>
+    </div>
+
+    <div class="mb-2">
+        <label class="text-muted small d-block">{% trans "Última atualização" %}</label>
+        <p class="mb-0">
+            <i class="fa-regular fa-calendar-edit"></i>
+            {{ opportunity.updated_at|date:"d/m/Y H:i" }}
+        </p>
+    </div>
+
+    <!-- Botões inferiores -->
+    <div class="mt-4 d-flex gap-2">
+        <a href="{% url 'opportunities:put' opportunity.pk %}" class="btn btn-primary">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
+        <a href="{% url 'opportunities:delete' opportunity.pk %}" class="btn btn-danger" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta oportunidade?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+        <a href="{% url 'opportunities:list' %}" class="btn btn-secondary">{% trans 'Voltar para lista' %} <i class="fa-solid fa-list"></i></a>
+    </div>
+</section>
+{% endblock content %}

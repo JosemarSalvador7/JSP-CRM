@@ -1,15 +1,15 @@
 from io import BytesIO
 from django.http import FileResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render , get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from django.db.transaction import atomic
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.decorators import login_required
 from fpdf import FPDF
 from accounts.forms import EditUserForm, FormLogin, RegisterUserForm
 from accounts.models import Profile
-from django.contrib.auth.decorators import login_required
 
 
 def login_view(requests):
@@ -145,3 +145,87 @@ def users_pdf_view(requets):
         )  # type:ignore
     pdf_out = pdf.output(dest="S").encode("latin1")  # type:ignore
     return FileResponse(BytesIO(pdf_out), filename=str(_("Lista de Usuarios.pdf")))
+
+
+@login_required(login_url="accounts:login")
+def profile_view(request):
+    """Exibe o perfil do usuário logado"""
+    user = request.user
+    profile = get_object_or_404(Profile, user=user)
+    
+    # Estatísticas do usuário
+    from contacts.models import Contact
+    from interations.models import Interaction
+    from task.models import Task
+    from opportunities.models import Opportunity
+    
+    total_contacts = Contact.objects.filter(created_by=user).count()
+    total_interactions = Interaction.objects.filter(created_by=user).count()
+    total_tasks = Task.objects.filter(created_by=user).count()
+    total_opportunities = Opportunity.objects.filter(created_by=user).count()
+    
+    context = {
+        'user': user,
+        'profile': profile,
+        'total_contacts': total_contacts,
+        'total_interactions': total_interactions,
+        'total_tasks': total_tasks,
+        'total_opportunities': total_opportunities,
+    }
+    return render(request, "profile.html", context)
+
+@login_required(login_url="accounts:login")
+def profile_edit_view(request):
+    """Edita o perfil do usuário logado"""
+    user = request.user
+    profile = get_object_or_404(Profile, user=user)
+    
+    if request.method == "POST":
+        form = EditUserForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Atualiza dados do usuário
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            
+            if username and username != user.username:
+                if User.objects.filter(username=username).exclude(id=user.id).exists():
+                    messages.error(request, _('Este nome de usuário já está em uso.'))
+                    return render(request, "profile_edit.html", {'form': form, 'user': user, 'profile': profile})
+                user.username = username
+            
+            if email and email != user.email:
+                if User.objects.filter(email=email).exclude(id=user.id).exists():
+                    messages.error(request, _('Este email já está em uso.'))
+                    return render(request, "profile_edit.html", {'form': form, 'user': user, 'profile': profile})
+                user.email = email
+            
+            if password:
+                user.set_password(password)
+            
+            user.save()
+            
+            # Atualiza o perfil
+            if 'avatar' in request.FILES:
+                profile.avatar = request.FILES['avatar']
+            
+            role = form.cleaned_data.get('role')
+            if role and role != profile.role:
+                profile.role = role
+                profile.save()  # O save() atualiza o code automaticamente
+            
+            profile.save()
+            
+            messages.success(request, _('Perfil atualizado com sucesso!'))
+            return redirect('accounts:profile')
+        else:
+            messages.error(request, _('Erro ao atualizar perfil. Verifique os dados.'))
+    else:
+        initial_data = {
+            'username': user.username,
+            'email': user.email,
+            'role': profile.role,
+        }
+        form = EditUserForm(initial=initial_data)
+    
+    return render(request, "profile_edit.html", {'form': form, 'user': user, 'profile': profile})

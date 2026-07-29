@@ -20,6 +20,7 @@ urlpatterns += i18n_patterns(
     path("accounts/", include("accounts.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("interactions/", include("interations.urls")),
-      path("task/", include("task.urls")),
+    path("task/", include("task.urls")),
+    path("opportunities/", include("opportunities.urls")),
     path("", dashboard.views.home_view),
 )

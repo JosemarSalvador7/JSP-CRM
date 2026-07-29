@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block profile_page %}active{% endblock profile_page %}
+
+{% block content %}
+
+<section class=" p-3 rounded-2">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mb-0 text-white">
+            <i class="fa-solid fa-pen"></i> 
+            {% trans 'Editar Perfil' %}
+        </h1>
+        <a href="{% url 'accounts:profile' %}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> {% trans 'Voltar' %}
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Coluna da Foto -->
+        <div class="col-12 col-md-4 text-center">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" alt="{{ user.username }}" class="img-fluid rounded-circle mb-3" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #0d6efd;">
+                    {% else %}
+                        <div class="bg-secondary text-white rounded-circle d-flex justify-content-center align-items-center mx-auto mb-3" style="width: 200px; height: 200px; font-size: 80px;">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mt-2">
+                        <span class="badge {% if profile.role == 'G' %}bg-danger{% else %}bg-primary{% endif %} fs-6">
+                            <i class="fa-solid fa-briefcase"></i> 
+                            {{ profile.get_role_display }}
+                        </span>
+                    </div>
+                    
+                    <p class="text-muted small mt-2 mb-0">
+                        <i class="fa-solid fa-id-card"></i> 
+                        {% trans 'Código:' %} <strong>{{ profile.code }}</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna do Formulário -->
+        <div class="col-12 col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="border-bottom pb-2 mb-3">
+                        <i class="fa-solid fa-edit"></i> 
+                        {% trans 'Editar Informações' %}
+                    </h5>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Foto -->
+                        <div class="mb-3">
+                            {{ form.avatar.as_field_group }}
+                        </div>
+
+                        <!-- Username e Email -->
+                        <div class="mb-3 d-flex" style="justify-content: space-between;">
+                            <div class="w-50 me-2">{{ form.username.as_field_group }}</div>
+                            <div class="w-50 ms-2">{{ form.email.as_field_group }}</div>
+                        </div>
+
+                        <!-- Password e Role -->
+                        <div class="mb-3 d-flex" style="justify-content: space-between;">
+                            <div class="w-50 me-2">{{ form.password.as_field_group }}</div>
+                            <div class="w-50 ms-2">{{ form.role.as_field_group }}</div>
+                        </div>
+
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-save"></i> {% trans 'Salvar Alterações' %}
+                            </button>
+                            <a href="{% url 'accounts:profile' %}" class="btn btn-secondary">
+                                <i class="fa-solid fa-times"></i> {% trans 'Cancelar' %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

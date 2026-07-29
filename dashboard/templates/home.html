@@ -1,7 +1,489 @@
 {% extends "base.html" %}
-{% block dasboard_page %}active{% endblock dasboard_page %}
+{% load static %}
+{% load i18n %}
 
-{% block container %}
-    
-{% endblock container %}
-    
+{% block home_page %}active{% endblock home_page %}
+
+{% block content %}
+
+<div class="bg-primary text-white p-2 rounded-3 shadow-sm mb-3">
+    <h5 class="mb-0">
+        <i class="fa-solid fa-house"></i> Dashboard | {{ request.user.get_full_name|default:request.user.username }}
+    </h5>
+</div>
+
+<!-- Cards de Estatísticas -->
+<div class="row g-3 mb-4">
+    <!-- Total de Contatos -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-subtitle text-muted">{% trans 'Total Contatos' %}</h6>
+                    <h3 class="card-title mt-2">{{ total_contacts }}</h3>
+                    <small class="text-muted">
+                        <i class="fa-regular fa-envelope"></i> {{ contacts_with_email }} com email
+                        <br>
+                        <i class="fa-regular fa-building"></i> {{ contacts_with_company }} com empresa
+                    </small>
+                </div>
+                <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                    <i class="fa-solid fa-address-book fs-4"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total de Interações -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-subtitle text-muted">{% trans 'Total Interações' %}</h6>
+                    <h3 class="card-title mt-2">{{ total_interactions }}</h3>
+                    <small class="text-muted">
+                        <i class="fa-solid fa-phone"></i> {{ calls_count }} chamadas
+                        <br>
+                        <i class="fa-solid fa-envelope"></i> {{ emails_count }} emails
+                        <br>
+                        <i class="fa-solid fa-handshake"></i> {{ meetings_count }} reuniões
+                    </small>
+                </div>
+                <div class="bg-success text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                    <i class="fa-solid fa-comments fs-4"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total de Tarefas -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-subtitle text-muted">{% trans 'Total Tarefas' %}</h6>
+                    <h3 class="card-title mt-2">{{ total_tasks }}</h3>
+                    <small class="text-muted">
+                        <span class="badge bg-warning text-dark">Pendentes: {{ pending_tasks }}</span>
+                        <br>
+                        <span class="badge bg-info">Em andamento: {{ in_progress_tasks }}</span>
+                        <br>
+                        <span class="badge bg-success">Concluídas: {{ done_tasks }}</span>
+                    </small>
+                </div>
+                <div class="bg-info text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                    <i class="fa-solid fa-tasks fs-4"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total de Oportunidades -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-subtitle text-muted">{% trans 'Total Oportunidades' %}</h6>
+                    <h3 class="card-title mt-2">{{ total_opportunities }}</h3>
+                    <small class="text-muted">
+                        <i class="fa-solid fa-circle-check"></i> Ativas: {{ active_opportunities }}
+                        <br>
+                        <i class="fa-solid fa-trophy"></i> Ganhas: {{ closed_won_count }}
+                        <br>
+                        <i class="fa-solid fa-circle-dollar"></i> R$ {{ total_opportunity_value|floatformat:2 }}
+                    </small>
+                </div>
+                <div class="bg-warning text-dark rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                    <i class="fa-solid fa-chart-line fs-4"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cards de Estágios das Oportunidades -->
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h5 class="mb-0 text-white">
+                    <i class="fa-solid fa-funnel-dollar"></i> 
+                    {% trans 'Funil de Oportunidades' %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-2 text-center">
+                    <div class="col-4 col-md-2">
+                        <div class="bg-secondary text-white p-2 rounded">
+                            <small>{% trans 'Prospecção' %}</small>
+                            <h5 class="mb-0">{{ prospecting_count }}</h5>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <div class="bg-info text-white p-2 rounded">
+                            <small>{% trans 'Qualificação' %}</small>
+                            <h5 class="mb-0">{{ qualification_count }}</h5>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <div class="bg-warning text-dark p-2 rounded">
+                            <small>{% trans 'Proposta' %}</small>
+                            <h5 class="mb-0">{{ proposal_count }}</h5>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <div class="bg-primary text-white p-2 rounded">
+                            <small>{% trans 'Negociação' %}</small>
+                            <h5 class="mb-0">{{ negotiation_count }}</h5>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <div class="bg-success text-white p-2 rounded">
+                            <small>{% trans 'Ganhas' %}</small>
+                            <h5 class="mb-0">{{ closed_won_count }}</h5>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <div class="bg-danger text-white p-2 rounded">
+                            <small>{% trans 'Perdidas' %}</small>
+                            <h5 class="mb-0">{{ closed_lost_count }}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-2">
+                    <a href="{% url 'opportunities:kanban' %}" class="btn btn-sm btn-outline-primary">
+                        {% trans 'Ver Kanban' %} <i class="fa-solid fa-table-columns"></i>
+                    </a>
+                    <a href="{% url 'opportunities:list' %}" class="btn btn-sm btn-outline-secondary">
+                        {% trans 'Ver Lista' %} <i class="fa-solid fa-list"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tarefas Urgentes -->
+<div class="row g-3 mb-4">
+    <!-- Tarefas Atrasadas -->
+    {% if overdue_tasks %}
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-triangle-exclamation"></i> 
+                    {% trans 'Tarefas Atrasadas' %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for task in overdue_tasks %}
+                <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <div>
+                        <a href="{% url 'tasks:retrieve' task.pk %}" class="text-decoration-none">
+                            <strong>{{ task.title|capfirst }}</strong>
+                        </a>
+                        <br>
+                        <small class="text-danger">
+                            <i class="fa-regular fa-calendar-xmark"></i> 
+                            Venceu em {{ task.due_date|date:"d/m/Y" }}
+                        </small>
+                    </div>
+                    <span class="badge bg-danger">Atrasada</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Próximas Tarefas -->
+    {% if upcoming_tasks %}
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="fa-regular fa-clock"></i> 
+                    {% trans 'Próximas Tarefas' %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for task in upcoming_tasks %}
+                <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <div>
+                        <a href="{% url 'tasks:retrieve' task.pk %}" class="text-decoration-none">
+                            <strong>{{ task.title|capfirst }}</strong>
+                        </a>
+                        <br>
+                        <small class="text-muted">
+                            <i class="fa-regular fa-calendar"></i> 
+                            {{ task.due_date|date:"d/m/Y" }}
+                        </small>
+                    </div>
+                    <span class="badge {% if task.priority == 'HIGH' %}bg-danger{% elif task.priority == 'MEDIUM' %}bg-warning{% else %}bg-success{% endif %}">
+                        {{ task.get_priority_display }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Atividades Recentes -->
+<div class="row g-3 mb-4">
+    <!-- Últimos Contatos -->
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-address-book"></i> 
+                    {% trans 'Últimos Contatos' %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for contact in recent_contacts %}
+                <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <div>
+                        <a href="{% url 'contacts:retrieve' contact.pk %}" class="text-decoration-none">
+                            {{ contact.name|capfirst }} {{ contact.surname|capfirst }}
+                        </a>
+                        <br>
+                        <small class="text-muted">
+                            <i class="fa-regular fa-calendar-plus"></i> 
+                            {{ contact.created_at|date:"d/m/Y H:i" }}
+                        </small>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-muted"></i>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center my-3">
+                    <i class="fa-regular fa-face-frown"></i> 
+                    {% trans 'Nenhum contato cadastrado.' %}
+                </p>
+                {% endfor %}
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{% url 'contacts:list' %}" class="btn btn-outline-primary btn-sm w-100">
+                    {% trans 'Ver todos os contatos' %} <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimas Interações -->
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-comments"></i> 
+                    {% trans 'Últimas Interações' %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for interaction in recent_interactions %}
+                <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <div>
+                        <a href="{% url 'interactions:retrieve' interaction.pk %}" class="text-decoration-none">
+                            <span class="badge {% if interaction.type_interaction == 'C' %}bg-success{% elif interaction.type_interaction == 'E' %}bg-warning{% elif interaction.type_interaction == 'M' %}bg-info{% else %}bg-secondary{% endif %}">
+                                {{ interaction.get_type_interaction_display }}
+                            </span>
+                            com {{ interaction.contact.name|capfirst }}
+                        </a>
+                        <br>
+                        <small class="text-muted">
+                            <i class="fa-regular fa-clock"></i> 
+                            {{ interaction.date_time|date:"d/m/Y H:i" }}
+                        </small>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-muted"></i>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center my-3">
+                    <i class="fa-regular fa-face-frown"></i> 
+                    {% trans 'Nenhuma interação registrada.' %}
+                </p>
+                {% endfor %}
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{% url 'interactions:list' %}" class="btn btn-outline-success btn-sm w-100">
+                    {% trans 'Ver todas as interações' %} <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Atividade Recente -->
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-bell"></i> 
+                    {% trans 'Atividade Recente' %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for activity in recent_activity %}
+                <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <div>
+                        <a href="{{ activity.url }}" class="text-decoration-none">
+                            <span class="badge {% if activity.type == 'contact' %}bg-primary{% elif activity.type == 'interaction' %}bg-success{% elif activity.type == 'task' %}bg-info{% else %}bg-warning{% endif %}">
+                                <i class="fa-solid 
+                                    {% if activity.type == 'contact' %}fa-address-book
+                                    {% elif activity.type == 'interaction' %}fa-comments
+                                    {% elif activity.type == 'task' %}fa-tasks
+                                    {% else %}fa-chart-line{% endif %}
+                                "></i>
+                                {{ activity.type|capfirst }}
+                            </span>
+                            {{ activity.action }}
+                            <br>
+                            <small class="text-muted">{{ activity.object|truncatechars:25 }}</small>
+                        </a>
+                    </div>
+                    <small class="text-muted">{{ activity.date|timesince }} atrás</small>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center my-3">
+                    <i class="fa-regular fa-face-frown"></i> 
+                    {% trans 'Nenhuma atividade recente.' %}
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Últimas Oportunidades -->
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-chart-line"></i> 
+                    {% trans 'Últimas Oportunidades' %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Nome' %}</th>
+                                <th>{% trans 'Valor' %}</th>
+                                <th>{% trans 'Estágio' %}</th>
+                                <th>{% trans 'Contato' %}</th>
+                                <th>{% trans 'Criado em' %}</th>
+                                <th>{% trans 'Ações' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for opp in recent_opportunities %}
+                            <tr>
+                                <td>{{ opp.name|capfirst }}</td>
+                                <td>R$ {{ opp.value|floatformat:2 }}</td>
+                                <td>
+                                    <span class="badge {% if opp.stage == 'PROSPECTING' %}bg-secondary{% elif opp.stage == 'QUALIFICATION' %}bg-info{% elif opp.stage == 'PROPOSAL' %}bg-warning{% elif opp.stage == 'NEGOTIATION' %}bg-primary{% elif opp.stage == 'CLOSED_WON' %}bg-success{% else %}bg-danger{% endif %}">
+                                        {{ opp.get_stage_display }}
+                                    </span>
+                                </td>
+                                <td>{{ opp.contact.name|capfirst }}</td>
+                                <td>{{ opp.created_at|date:"d/m/Y" }}</td>
+                                <td>
+                                    <a href="{% url 'opportunities:retrieve' opp.pk %}" class="btn btn-sm btn-info">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">
+                                    <i class="fa-regular fa-face-frown"></i> 
+                                    {% trans 'Nenhuma oportunidade cadastrada.' %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-end">
+                    <a href="{% url 'opportunities:list' %}" class="btn btn-sm btn-outline-warning">
+                        {% trans 'Ver todas as oportunidades' %} <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Links Rápidos -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-rocket"></i> 
+                    {% trans 'Ações Rápidas' %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-6 col-md-2">
+                        <a href="{% url 'contacts:add' %}" class="btn btn-outline-primary w-100">
+                            <i class="fa-solid fa-user-plus"></i> 
+                            {% trans 'Contato' %}
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <a href="{% url 'interactions:post' %}" class="btn btn-outline-success w-100">
+                            <i class="fa-solid fa-comment-plus"></i> 
+                            {% trans 'Interação' %}
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <a href="{% url 'tasks:post' %}" class="btn btn-outline-info w-100">
+                            <i class="fa-solid fa-plus"></i> 
+                            {% trans 'Tarefa' %}
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <a href="{% url 'opportunities:post' %}" class="btn btn-outline-warning w-100">
+                            <i class="fa-solid fa-plus"></i> 
+                            {% trans 'Oportunidade' %}
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <a href="{% url 'opportunities:kanban' %}" class="btn btn-outline-info w-100">
+                            <i class="fa-solid fa-table-columns"></i> 
+                            {% trans 'Kanban' %}
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <a href="{% url 'contacts:list' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fa-solid fa-list"></i> 
+                            {% trans 'Ver Tudo' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estatísticas do Sistema -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-body text-center text-muted">
+                <small>
+                    <i class="fa-solid fa-users"></i> 
+                    {% trans 'Usuários no sistema:' %} {{ total_users }} | 
+                    <i class="fa-solid fa-address-book"></i> 
+                    {% trans 'Total de contatos:' %} {{ total_system_contacts }}
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
