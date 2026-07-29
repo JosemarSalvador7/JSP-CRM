@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block page_title %}Update{% endblock page_title %}
+ {% block accounts_page %}active{% endblock accounts_page %}
 {% load crispy_forms_tags %}
 {% load i18n %}
 {% block content %}
@@ -8,7 +9,7 @@
     <div class="d-flex justify-content-end"><a href="{% url 'accounts:list' %}" class="btn btn-success" role="button">{% trans "Voltar" %}</a></div>
     <form action="{% url 'accounts:edit' user_edit.id %}" method="POST" autocomplete="off" enctype="multipart/form-data">{% csrf_token %}
       <h2 class="text-center">{% trans 'Editar dados do Usuário' %} {{user.username}}</h2>
-      {{form |crispy}}
+      {{form|crispy}}
       <button type="submit" class="btn btn-primary mb-2">{% trans 'Atualizar os dados' %}</button>
     </form>
   </div>

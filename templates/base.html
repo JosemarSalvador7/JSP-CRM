@@ -87,6 +87,18 @@
               <span>{% trans 'Interações' %}</span>
             </a>
           </li>
+          <li class="nav-item-custom">
+            <a
+              href="{% url 'tasks:list' %}"
+              class="nav-link-custom {% block task_page %}{% endblock task_page %}"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="{% trans 'Tarefas' %}"
+            >
+              <i class="fa-solid fa-list-check"></i>
+              <span>{% trans 'Tarefas' %}</span>
+            </a>
+          </li>
           <li class="nav-item-custom mt-3">
             <a
               href="{% url 'accounts:list' %}"
@@ -170,7 +182,7 @@
               <img 
                 src="{{ user.profile.avatar.url }}" 
                 alt="{% trans 'Avatar de' %} {{ user.username }}"
-                style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; cursor: pointer;"
+                style="width: 50px; height:50px; border-radius: 50%; object-fit: cover; cursor: pointer;"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="{{ user.username }}"

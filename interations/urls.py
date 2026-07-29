@@ -10,5 +10,7 @@ urlpatterns = [
     path("put/<int:id>/", views.put_view, name="put"),
     path("delete/<int:id>/", views.delete_view, name="delete"),
     path("pdf/", views.gerar_pdf_interactions, name="pdf"),
-    path("pdf/<int:id>/", views.retrievepdf_interaction, name="retrievepdf"),  # Nova rota
+    path(
+        "pdf/<int:id>/", views.retrievepdf_interaction, name="retrievepdf"
+    ),  # Nova rota
 ]

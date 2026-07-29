@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from contacts.models import Contact
 
-
-#  PROSPECTING, QUALIFICATION, PROPOSAL, NEGOTIATION, CLOSED_WON, CLOSED_LOST
 # Create your models here.
 class Oppurtunity(models.Model):
     opu_choices = (
