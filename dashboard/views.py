@@ -8,11 +8,12 @@ from contacts.models import Contact
 
 @login_required(login_url="accounts:login")
 def home_view(requests):
-    
-    return render(requests, "home.html", {
-        'total_user': User.objects.count(),
-        'total_contacts':Contact.objects.count()
-    })
+
+    return render(
+        requests,
+        "home.html",
+        {"total_user": User.objects.count(), "total_contacts": Contact.objects.count()},
+    )
 
 
 def sobre_view(requests):

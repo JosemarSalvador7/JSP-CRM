@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block interaction_page %}active{% endblock interaction_page %}
+
+{% block content %}
+<section class="bg-light p-3 rounded-2">
+    <!-- Cabeçalho com botões -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mb-0">{% trans 'Detalhes da Interação' %}</h1>
+        <div class="d-flex gap-2">
+            <a href="{% url 'interactions:retrievepdf' interaction.pk %}" class="btn btn-outline-danger" target="_blank">{% trans 'PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
+            <a href="{% url 'interactions:put' interaction.pk %}" class="btn btn-primary">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
+            <a href="{% url 'interactions:delete' interaction.pk %}" class="btn btn-danger" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta interação?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+            <a href="{% url 'interactions:list' %}" class="btn btn-secondary">{% trans 'Voltar' %} <i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+    </div>
+    <!-- Informações da Interação -->
+    <h5 class="border-bottom pb-2 mb-3">{% trans "Informações da Interação" %}</h5>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Tipo" %}</label>
+            <p class="mb-0">
+                <span class="badge {% if interaction.type_interaction == 'C' %}bg-success{% elif interaction.type_interaction == 'E' %}bg-warning{% elif interaction.type_interaction == 'M' %}bg-info{% else %}bg-secondary{% endif %} fs-6">
+                    {{ interaction.get_type_interaction_display }}
+                </span>
+            </p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Data/Hora" %}</label>
+            <p class="mb-0">{{ interaction.date_time|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
+
+    <div class="mb-2">
+        <label class="text-muted small d-block">{% trans "Contato" %}</label>
+        <p class="mb-0">
+            <a href="{% url 'contacts:retrieve' interaction.contact.pk %}" class="text-decoration-none">
+                <i class="fa-solid fa-user"></i>
+                {{ interaction.contact.name|capfirst }} {{ interaction.contact.surname|capfirst }}
+            </a>
+            <br>
+            <small class="text-muted">
+                <i class="fa-solid fa-phone"></i> {{ interaction.contact.phone }}
+                {% if interaction.contact.email %}
+                    | <i class="fa-solid fa-envelope"></i> {{ interaction.contact.email }}
+                {% endif %}
+            </small>
+        </p>
+    </div>
+
+    <div class="mb-2">
+        <label class="text-muted small d-block">{% trans "Descrição Completa" %}</label>
+        <div class="p-3 bg-white rounded border">
+            {{ interaction.description|linebreaks }}
+        </div>
+    </div>
+
+    <!-- Informações do Sistema -->
+    <h5 class="border-bottom pb-2 mb-3 mt-4">{% trans "Informações do Sistema" %}</h5>
+
+    <div class="mb-2 d-flex" style="justify-content: space-between;">
+        <div class="w-50 me-2">
+            <label class="text-muted small d-block">{% trans "Criado por" %}</label>
+            <p class="mb-0">
+                <i class="fa-solid fa-user-circle"></i>
+                {{ interaction.created_by.get_full_name|default:interaction.created_by.username }}
+            </p>
+        </div>
+        <div class="w-50 ms-2">
+            <label class="text-muted small d-block">{% trans "Criado em" %}</label>
+            <p class="mb-0">
+                <i class="fa-regular fa-calendar-plus"></i>
+                {{ interaction.created_at|date:"d/m/Y H:i" }}
+            </p>
+        </div>
+    </div>
+
+    <div class="mb-2">
+        <label class="text-muted small d-block">{% trans "Última atualização" %}</label>
+        <p class="mb-0">
+            <i class="fa-regular fa-calendar-edit"></i>
+            {{ interaction.updated_at|date:"d/m/Y H:i" }}
+        </p>
+    </div>
+
+    <!-- Botões inferiores -->
+    <div class="mt-4 d-flex gap-2">
+        <a href="{% url 'interactions:put' interaction.pk %}" class="btn btn-primary">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
+        <a href="{% url 'interactions:delete' interaction.pk %}" class="btn btn-danger" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta interação?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+        <a href="{% url 'interactions:list' %}" class="btn btn-secondary">{% trans 'Voltar para lista' %} <i class="fa-solid fa-list"></i></a>
+    </div>
+</section>
+{% endblock content %}

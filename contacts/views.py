@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+
 @login_required()
 def retrievepdf(requets, id):
     contact = get_object_or_404(Contact, id=id)
@@ -130,6 +131,7 @@ def retrievepdf(requets, id):
         BytesIO(pdf_contact), filename=f"{contact.name} {contact.surname}.pdf"
     )
 
+
 @login_required()
 def gerar_pdf(requests):
     contacts = Contact.objects.all()
@@ -195,6 +197,7 @@ def gerar_pdf(requests):
     pdf_out = pdf.output(dest="S").encode("latin1")  # type:ignore
     return FileResponse(BytesIO(pdf_out), filename="contactos.pdf")
 
+
 @login_required()
 def list_contacts(request):
     contacts_qs = Contact.objects.all()
@@ -242,12 +245,14 @@ def add_contacts(requests):
         },
     )
 
+
 @login_required()
 def delete_contacts(requests, id):
     contact = get_object_or_404(Contact, id=id)
     contact.delete()
     messages.success(requests, _("Contacto Eliminado com sucesso"))
     return redirect("contacts:list")
+
 
 @login_required()
 def retrieve_contact(requests, id):
@@ -261,6 +266,7 @@ def retrieve_contact(requests, id):
             "contact": contact,
         },
     )
+
 
 @login_required()
 def update_contact(requests, id):

@@ -11,6 +11,7 @@ from accounts.forms import EditUserForm, FormLogin, RegisterUserForm
 from accounts.models import Profile
 from django.contrib.auth.decorators import login_required
 
+
 def login_view(requests):
     if requests.method == "POST":
         user = requests.POST.get("username")
@@ -47,7 +48,6 @@ def register_view(requests):
     return render(requests, "register.html", {"form": RegisterUserForm()})
 
 
-
 @login_required()
 def list_view(requests):
     users = User.objects.all()
@@ -64,6 +64,7 @@ def list_view(requests):
             ).count(),
         },
     )
+
 
 @login_required()
 @atomic
@@ -102,12 +103,13 @@ def edit_view(requests, user_id):
 def delete_view(request, user_id):
     user = User.objects.get(id=user_id)
     username = user.username
-    if user.id == request.user.id: #type:ignore
-        messages.error(request,'Não Pode Apagar a sua Própria conta')
+    if user.id == request.user.id:  # type:ignore
+        messages.error(request, "Não Pode Apagar a sua Própria conta")
         return redirect("accounts:list")
     user.delete()
     messages.success(request, _(f"Usuário {username} Eliminado Com Sucesso"))
     return redirect("accounts:list")
+
 
 @login_required()
 def users_pdf_view(requets):
@@ -127,14 +129,17 @@ def users_pdf_view(requets):
     for user in User.objects.all():
         pdf.cell(w=72, h=10, txt=_("Nome de Usuário"), border=1)  # type:ignore
         pdf.cell(
-            w=72, h=10, txt=_(f"{(user.get_full_name()) or 'Não Informado'}"), border=1
+            w=72,
+            h=10,
+            txt=_(f"{(user.get_full_name()) or 'Não Informado'}"),
+            border=1,  # type:ignore
         )  # type:ignore
         pdf.cell(w=72, h=10, txt=_(f"{user.email or 'Não Informado'}"), border=1)  # type:ignore
         pdf.cell(w=30, h=10, txt=_(f"{user.profile.get_role_display()}"), border=1)  # type:ignore
         pdf.cell(
             w=30,
             h=10,
-            txt=_(f"{'ativo' if user.is_active else 'inativo'}"),
+            txt=_(f"{'ativo' if user.is_active else 'inativo'}"),  # type:  ignore
             border=1,
             ln=1,
         )  # type:ignore

@@ -17,7 +17,6 @@
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="{% static '/fontawesome/css/all.min.css' %}" />
 
-
     <!-- Styles -->
     <link rel="stylesheet" href="{% static 'base/css/main.css' %}" />
   </head>
@@ -42,7 +41,7 @@
         <!-- Brand -->
         <div class="sidebar-brand">
           <div class="brand-icon">
-        <i class="fa-solid fa-users"></i>
+            <i class="fa-solid fa-users"></i>
           </div>
           <div class="brand-text-wrapper">
             <div class="brand-text">JSP CRM</div>
@@ -64,7 +63,7 @@
               <span>Dashboard</span>
             </a>
           </li>
-           <li class="nav-item-custom">
+          <li class="nav-item-custom">
             <a
               href="{% url 'contacts:list' %}"
               class="nav-link-custom {% block contact_page %} {% endblock contact_page %}"
@@ -75,20 +74,31 @@
               <i class="fa-regular fa-address-book"></i>
               <span>{% trans 'Contactos' %}</span>
             </a>
-            <li class="nav-item-custom mt-3">
-              <a
-                href="{% url 'accounts:list' %}"
-                class="nav-link-custom  {% block accounts_page %}{% endblock accounts_page %}"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                title="Usuários"
-              >
-               <i class="fa-solid fa-users"></i>
-                <span>{% trans 'Usuários' %}</span>
-              </a>
-            </li>
           </li>
-
+          <li class="nav-item-custom">
+            <a
+              href="{% url 'interactions:list' %}"
+              class="nav-link-custom {% block interaction_page %}{% endblock interaction_page %}"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="{% trans 'Interações' %}"
+            >
+      <i class="fa-regular fa-message"></i>
+              <span>{% trans 'Interações' %}</span>
+            </a>
+          </li>
+          <li class="nav-item-custom mt-3">
+            <a
+              href="{% url 'accounts:list' %}"
+              class="nav-link-custom  {% block accounts_page %}{% endblock accounts_page %}"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="Usuários"
+            >
+              <i class="fa-solid fa-users"></i>
+              <span>{% trans 'Usuários' %}</span>
+            </a>
+          </li>
           <li class="nav-item-custom mt-3">
             <a
               href="{% url 'dashboard:sobre' %}"
@@ -97,7 +107,7 @@
               data-bs-placement="right"
               title="Sobre"
             >
-             <i class="fa-solid fa-circle-info"></i>
+              <i class="fa-solid fa-circle-info"></i>
               <span>Sobre</span>
             </a>
           </li>
@@ -109,12 +119,32 @@
             class="user-profile"
             data-bs-toggle="tooltip"
             data-bs-placement="right"
-            title="{{user.username}}"
+            title="{{ user.username }}"
           >
-            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <!-- Avatar do usuário -->
+            <div class="user-avatar">
+              {% if user.profile.avatar %}
+                <img 
+                  src="{{ user.profile.avatar.url }}" 
+                  alt="{% trans 'Avatar de' %} {{ user.username }}"
+                  class="user-avatar-img"
+                  style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
+                >
+              {% else %}
+                <i class="fa-solid fa-user"></i>
+              {% endif %}
+            </div>
             <div class="user-info">
-              <div class="user-name">{{user.username | capfirst}}</div>
-              <div class="user-role">User</div>
+              <div class="user-name">{{ user.username | capfirst }}</div>
+              <div class="user-role">
+                {% if user.profile.role == 'G' %}
+                  {% trans 'Gerente' %}
+                {% elif user.profile.role == 'V' %}
+                  {% trans 'Vendedor' %}
+                {% else %}
+                  {% trans 'Utilizador' %}
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
@@ -128,58 +158,70 @@
         <i class="fas fa-bars"></i>
       </button>
 
-
       <!-- Barra superior -->
       <div class="dashboard-topbar">
         <div class="page-title">
-          <h1>{% block title_page_body%}{% endblock title_page_body %}</h1>
+          <h1>{% block title_page_body %}{% endblock title_page_body %}</h1>
         </div>
         <div class="header-actions">
-            {% comment %} <a
-            href="{% url 'profile' %}"
-              class="icon-btn"
-              data-bs-toggle="tooltip"
-              data-bs-placement="bottom"
-              title="profile"
-            >
-              <i class="fas fa-user"></i>
-            </a> {% endcomment %}
-            <a
-              class="icon-btn text-danger"
-              data-bs-toggle="tooltip"
-              data-bs-placement="bottom"
-              title="Logout"
-              href="{% url 'accounts:logout' %}"
-              style="text-decoration: none;"
-            >
-
-              <i class="fa-solid fa-arrow-right-from-bracket" ></i>
-            </a>
+          <!-- Avatar do usuário na barra superior -->
+          <div class="user-avatar-topbar">
+            {% if user.profile.avatar %}
+              <img 
+                src="{{ user.profile.avatar.url }}" 
+                alt="{% trans 'Avatar de' %} {{ user.username }}"
+                style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; cursor: pointer;"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="{{ user.username }}"
+              >
+            {% else %}
+              <a
+                href="#"
+                class="icon-btn"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="{{ user.username }}"
+              >
+                <i class="fas fa-user"></i>
+              </a>
+            {% endif %}
           </div>
+          <a
+            class="icon-btn text-danger"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Logout"
+            href="{% url 'accounts:logout' %}"
+            style="text-decoration: none;"
+          >
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </a>
         </div>
-        <!-- ÁREA DE MENSAGENS -->
-        {% if messages %}
-            <div class="messages-container">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {% if message.tags == 'success' %}
-                            <i class="bi bi-check-circle-fill me-2"></i>
-                        {% elif message.tags == 'error' %}
-                            <i class="bi bi-exclamation-circle-fill me-2"></i>
-                        {% elif message.tags == 'warning' %}
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        {% elif message.tags == 'info' %}
-                            <i class="bi bi-info-circle-fill me-2"></i>
-                        {% endif %}
-                        
-                        {{ message }}
-                        
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+      </div>
 
+      <!-- ÁREA DE MENSAGENS -->
+      {% if messages %}
+        <div class="messages-container">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+              {% if message.tags == 'success' %}
+                <i class="bi bi-check-circle-fill me-2"></i>
+              {% elif message.tags == 'error' %}
+                <i class="bi bi-exclamation-circle-fill me-2"></i>
+              {% elif message.tags == 'warning' %}
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              {% elif message.tags == 'info' %}
+                <i class="bi bi-info-circle-fill me-2"></i>
+              {% endif %}
+              
+              {{ message }}
+              
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
 
       {% block content %} {% endblock content %}
     </main>
@@ -188,8 +230,7 @@
     <script src="{% static '/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static '/base/js/main.js' %}"></script>
 
-
-{% block extra_js %}
-{% endblock %}
+    {% block extra_js %}
+    {% endblock %}
   </body>
 </html>

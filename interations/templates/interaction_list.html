@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block interaction_page %}active{% endblock interaction_page %}
+
+{% block content %}
+<section>
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle text-muted">{% trans 'Total Interações' %}</h6>
+                        <h3 class="card-title mt-2">{{ interactions.count }}</h3>
+                    </div>
+                    <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle text-muted">{% trans 'Chamadas' %}</h6>
+                        <h3 class="card-title mt-2">{{ calls_count }}</h3>
+                    </div>
+                    <div class="bg-success text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle text-muted">{% trans 'Emails' %}</h6>
+                        <h3 class="card-title mt-2">{{ emails_count }}</h3>
+                    </div>
+                    <div class="bg-warning text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle text-muted">{% trans 'Reuniões' %}</h6>
+                        <h3 class="card-title mt-2">{{ meetings_count }}</h3>
+                    </div>
+                    <div class="bg-info text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="p-2">
+    <a href="{% url 'interactions:post' %}" class="btn bg-primary text-white">{% trans 'Nova Interação' %} <i class="fa-solid fa-plus"></i></a>
+    <a href="{% url 'interactions:pdf' %}" class="btn btn-outline-danger" target="_blank">{% trans 'Baixar Lista em PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
+</div>
+
+<section class='bg-light rounded-3 mt-3 p-3'>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>{% trans 'Tipo' %}</th>
+                    <th>{% trans 'Contato' %}</th>
+                    <th>{% trans 'Data/Hora' %}</th>
+                    <th>{% trans 'Descrição' %}</th>
+                    <th>{% trans 'Criado por' %}</th>
+                    <th>{% trans 'Ações' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for interaction in interactions %}
+                <tr>
+                    <td>
+                        <span class="badge {% if interaction.type_interaction == 'C' %}bg-success{% elif interaction.type_interaction == 'E' %}bg-warning{% elif interaction.type_interaction == 'M' %}bg-info{% else %}bg-secondary{% endif %}">
+                            {{ interaction.get_type_interaction_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'contacts:retrieve' interaction.contact.pk %}">
+                            {{ interaction.contact.name|capfirst }} {{ interaction.contact.surname|capfirst }}
+                        </a>
+                    </td>
+                    <td>{{ interaction.date_time|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        {% if interaction.description|length > 50 %}
+                            {{ interaction.description|truncatechars:50 }}
+                            <span class="text-muted">...</span>
+                        {% else %}
+                            {{ interaction.description }}
+                        {% endif %}
+                    </td>
+                    <td>{{ interaction.created_by.get_full_name|default:interaction.created_by.username }}</td>
+                    <td>
+                        <a href="{% url 'interactions:retrieve' interaction.pk %}" class="btn btn-info btn-sm">{% trans 'Ver Mais' %} <i class="fa-solid fa-eye"></i></a>
+                        <a href="{% url 'interactions:put' interaction.pk %}" class="btn btn-warning btn-sm">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
+                        <a href="{% url 'interactions:delete' interaction.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta interação?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+                        <a href="{% url 'interactions:retrievepdf' interaction.pk %}" class="btn btn-outline-danger btn-sm" target="_blank">{% trans 'PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">{% trans 'Nenhuma interação encontrada.' %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock content %}

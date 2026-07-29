@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block interaction_page %}active{% endblock interaction_page %}
+
+{% block content %}
+<section class="bg-light p-2 rounded-2">
+    <h1 class="text-center mb-2">
+        {% if form.instance.pk %}
+            {% trans 'Editar Interação' %}
+        {% else %}
+            {% trans 'Nova Interação' %}
+        {% endif %}
+    </h1>
+    
+    <form action="{% if form.instance.pk %}{% url 'interactions:put' form.instance.pk %}{% else %}{% url 'interactions:post' %}{% endif %}" method="post" class="form-control-father">
+        {% csrf_token %}
+
+        <div class="mb-2 d-flex" style="justify-content: space-between;">
+            <div class="w-50 me-2">{{ form.type_interaction.as_field_group }}</div>
+            <div class="w-50 ms-2">{{ form.date_time.as_field_group }}</div>
+        </div>
+
+        <div class="mb-2">
+            {{ form.contact.as_field_group }}
+        </div>
+
+        <div class="mb-2">
+            {{ form.description.as_field_group }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            {% if form.instance.pk %}
+                {% trans 'Atualizar Interação' %}
+            {% else %}
+                {% trans 'Cadastrar Interação' %}
+            {% endif %}
+        </button>
+        <a href="{% url 'interactions:list' %}" class="btn btn-success">{% trans 'Voltar' %}</a>
+    </form>
+</section>
+{% endblock content %}
