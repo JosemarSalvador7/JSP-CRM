@@ -18,3 +18,4 @@ class InteractionModel(admin.ModelAdmin):
     list_filter = [
         "type_interaction",
     ]
+    empty_value_display = "-empty-"

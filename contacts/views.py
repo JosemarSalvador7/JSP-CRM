@@ -235,7 +235,13 @@ def add_contacts(requests):
             return redirect("contacts:list")
         else:
             messages.error(requests, _("Erro a adicionar Contacto"))
-            return redirect("contacts:list")
+            return render(
+                requests,
+                "add_contacts.html",
+                {
+                    "form": form,
+                },
+            )
 
     return render(
         requests,

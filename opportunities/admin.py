@@ -12,3 +12,4 @@ class OpportunityAdmin(admin.ModelAdmin):
         "stage",
     ]
     ordering = ["created_at"]
+    empty_value_display = "-empty-"

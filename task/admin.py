@@ -13,3 +13,4 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ["title", "status", "contact", "due_date", "priority", "created_by"]
     list_filter = ["status", "priority"]
     ordering = ["due_date"]
+    empty_value_display = "-empty-"
