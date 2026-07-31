@@ -16,3 +16,5 @@ db.sqlite3
 .ruff_cache
 README_TEMP.md
 API.md
+TODO.md
+PERMISSIONS.md

@@ -113,18 +113,22 @@
               <span>{% trans 'Oportunidades' %}</span>
             </a>
           </li>
-          <li class="nav-item-custom mt-3">
-            <a
-              href="{% url 'accounts:list' %}"
-              class="nav-link-custom {% block accounts_page %}{% endblock accounts_page %}"
-              data-bs-toggle="tooltip"
-              data-bs-placement="right"
-              title="Usuários"
-            >
-              <i class="fa-solid fa-users"></i>
-              <span>{% trans 'Usuários' %}</span>
-            </a>
-          </li>
+
+{% if user.profile.role == 'G' %}
+            <li class="nav-item-custom mt-3">
+              <a
+                href="{% url 'accounts:list' %}"
+                class="nav-link-custom {% block accounts_page %}{% endblock accounts_page %}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Usuários"
+              >
+                <i class="fa-solid fa-users"></i>
+                <span>{% trans 'Usuários' %}</span>
+              </a>
+            </li>
+{% endif %}
+  
           <li class="nav-item-custom">
             <a
               href="{% url 'dashboard:sobre' %}"

@@ -50,7 +50,7 @@ def register_view(requests):
 
 @login_required()
 def list_view(requests):
-    users = User.objects.all()
+    users = User.objects.only("username",'is_active','email')
     return render(
         requests,
         "list_accounts.html",
@@ -70,7 +70,7 @@ def list_view(requests):
 @atomic
 def edit_view(requests, user_id):
     user = User.objects.get(id=user_id)
-    profile = Profile.objects.get(user=user)
+    profile = Profile.objects.get(user_id=user)
     if requests.method == "POST":
         user.username = requests.POST.get("username") or user.username
         user.set_password(requests.POST.get("password") or user.password)
