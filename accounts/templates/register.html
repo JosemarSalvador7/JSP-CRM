@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block page_title %}Update{% endblock page_title %}
+ {% block accounts_page %}active{% endblock accounts_page %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% block content %}
+<main class="container mt-4" style=" align-items: center; justify-content: center; display: flex;"  >
+  <div class="border-4 p-4 shadow-lg text-white" style=" border-radius: 10px;">
+    <div class="d-flex justify-content-end"><a href="{% url 'accounts:list' %}" class="btn btn-success" role="button">{% trans "Voltar" %}</a></div>
+    <form action="{% url 'accounts:register' %}" method="POST" autocomplete="off" enctype="multipart/form-data">{% csrf_token %}
+      <h2 class="text-center">{% trans 'Cadastrar Usuário' %}</h2>
+      {{form|crispy}}
+      <button type="submit" class="btn btn-primary mb-2">{% trans 'Cadastrar' %}</button>
+    </form>
+  </div>
+</main>
+{% endblock content %}

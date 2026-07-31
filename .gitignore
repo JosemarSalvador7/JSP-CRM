@@ -12,6 +12,7 @@ media/perfil/*
 locale/*
 *.sqlite3
 *.db
+db.sqlite3
 .ruff_cache
 README_TEMP.md
 API.md
