@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 from fpdf import FPDF
 from io import BytesIO
 from django.contrib import messages
@@ -10,12 +10,18 @@ from contacts.models import Contact
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+# Permissoes
+from rolepermissions.decorators import has_permission_decorator
 
 
+
+#@has_permission_decorator('view_contact')
 @login_required()
-def retrievepdf(requets, id):
-    contact = get_object_or_404(Contact, id=id)
+def retrievepdf(request, id):
+    if request.user.profile.role == 'G':
+       contact = get_object_or_404(Contact, Q(id=id,))
+    elif request.user.profile.role == 'V':
+        contact = get_object_or_404(Contact, Q(id=id,assigned_to=request.user))
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Times", "B", 24)
@@ -254,8 +260,12 @@ def add_contacts(requests):
 
 @login_required()
 def delete_contacts(requests, id):
-    contact = get_object_or_404(Contact, id=id)
-    contact.delete()
+    # TODO: caso erro a elimiar mostrar mensaguem de contecto associado 
+    try:
+        contact = get_object_or_404(Contact, id=id)
+        contact.delete()
+    except Exception as e:
+       return HttpResponse(e)
     messages.success(requests, _("Contacto Eliminado com sucesso"))
     return redirect("contacts:list")
 

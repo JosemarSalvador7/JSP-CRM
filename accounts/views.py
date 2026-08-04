@@ -11,6 +11,10 @@ from fpdf import FPDF
 from accounts.forms import EditUserForm, FormLogin, RegisterUserForm
 from accounts.models import Profile
 
+# permissions
+from rolepermissions.roles import assign_role ,remove_role
+from rolepermissions.decorators import has_role_decorator
+
 
 def login_view(requests):
     if requests.method == "POST":
@@ -18,7 +22,7 @@ def login_view(requests):
         password = requests.POST.get("password")
         result = authenticate(requests, username=user, password=password)
         if result is None:
-            messages.error(requests, _("Senha ou email ERRADO"))
+            messages.error(requests, _("Senha ou Nome de Usuário ERRADO"))
             return redirect("accounts:login")
         login(requests, user=result)
         return redirect("dashboard:home")
@@ -32,6 +36,7 @@ def logout_view(requests):
     return redirect("accounts:login")
 
 
+@has_role_decorator("gerente")
 @login_required()
 @atomic
 def register_view(requests):
@@ -43,14 +48,19 @@ def register_view(requests):
         avatar = requests.FILES.get("avatar")
         user = User.objects.create_user(username=user, password=password, email=email)
         Profile.objects.create(user=user, role=role, avatar=avatar)  # type: ignore
+        if role == "G":
+            assign_role(user, "gerente")
+        elif role == "V":
+            assign_role(user, "vendedor")
         messages.success(requests, _("Usuario cadastrado com sucesso"))
         return redirect("accounts:register")
     return render(requests, "register.html", {"form": RegisterUserForm()})
 
 
+@has_role_decorator("gerente")
 @login_required()
 def list_view(requests):
-    users = User.objects.only("username",'is_active','email')
+    users = User.objects.only("username", "is_active", "email")
     return render(
         requests,
         "list_accounts.html",
@@ -66,6 +76,7 @@ def list_view(requests):
     )
 
 
+@has_role_decorator("gerente")
 @login_required()
 @atomic
 def edit_view(requests, user_id):
@@ -79,6 +90,12 @@ def edit_view(requests, user_id):
         profile.role = requests.POST.get("role") or profile.role
         profile.avatar = requests.FILES.get("avatar") or profile.avatar  # type: ignore
         profile.save()
+        if profile.role == "G":
+            remove_role(user, "vendedor")
+            assign_role(user, "gerente")
+        elif profile.role == "V":
+            remove_role(user, "gerente")
+            assign_role(user, "vendedor")
         messages.success(requests, _("Dados do Usuario Atualizado com sucesso"))
         return redirect("accounts:list")
 
@@ -99,6 +116,7 @@ def edit_view(requests, user_id):
     )
 
 
+@has_role_decorator("gerente")
 @login_required()
 def delete_view(request, user_id):
     user = User.objects.get(id=user_id)
@@ -111,6 +129,7 @@ def delete_view(request, user_id):
     return redirect("accounts:list")
 
 
+@has_role_decorator("gerente")
 @login_required()
 def users_pdf_view(requets):
     pdf = FPDF()
@@ -131,9 +150,9 @@ def users_pdf_view(requets):
         pdf.cell(
             w=72,
             h=10,
-            txt=_(f"{(user.get_full_name()) or 'Não Informado'}"),
-            border=1,  # type:ignore
-        )  # type:ignore
+            txt=_(f"{(user.get_full_name()) or 'Não Informado'}"),  # type:ignore
+            border=1,
+        )
         pdf.cell(w=72, h=10, txt=_(f"{user.email or 'Não Informado'}"), border=1)  # type:ignore
         pdf.cell(w=30, h=10, txt=_(f"{user.profile.get_role_display()}"), border=1)  # type:ignore
         pdf.cell(
@@ -216,7 +235,7 @@ def profile_edit_view(request):
 
             # Atualiza o perfil
             if "avatar" in request.FILES:
-                profile.avatar = request.FILES["avatar"]
+                profile.avatar = request.FILES.get("avatar")
 
             role = form.cleaned_data.get("role")
             if role and role != profile.role:

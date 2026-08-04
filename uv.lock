@@ -115,6 +115,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-role-permissions"
+version = "3.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c7/5b/c2b85791ca63f846ecc33561b9e486cccd8ee3cee906ec694c4e3b7b3f7d/django-role-permissions-3.2.0.tar.gz", hash = "sha256:5a89eaa098f3da951b4633e655d5f3188f3d6ec5f0b846a8b1690d094ddc6ea6", size = 16479, upload-time = "2023-06-09T20:31:32.42Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/21/03/baa0d85a7b82bf8fa02f31627d789f39245841975717fd93a973f1a35afc/django_role_permissions-3.2.0-py3-none-any.whl", hash = "sha256:39c4237e9ed2983c0d7fa38bd7f7c4942a04daac739d5be1921efccb074a0606", size = 12782, upload-time = "2023-06-09T20:31:30.853Z" },
+]
+
+[[package]]
 name = "django-rql"
 version = "4.4.1"
 source = { registry = "https://pypi.org/simple" }
@@ -125,6 +137,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/78/12/68c77a92cc1cdb42480777cb54d048e7a28e3bc18c07f85a1ec524f802fc/django_rql-4.4.1.tar.gz", hash = "sha256:1c0e5549c52d2c3ac6156f846eb224b6edc07bcf7f09cc1f589b4bc395aa2358", size = 35506, upload-time = "2024-06-27T15:28:53.077Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7e/60/c0aa3495e903da8949c4d9396ce58c59bcf5c9b0506d69b978a44742119f/django_rql-4.4.1-py3-none-any.whl", hash = "sha256:ee69cddbe9bf443c530b2bb386cd1482592b0d17be8fdaf5a3c8b8d2a8b851dd", size = 37132, upload-time = "2024-06-27T15:28:50.873Z" },
+]
+
+[[package]]
+name = "django-unfold"
+version = "0.102.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6f/97/55babd6f07f510bb94adb95998fc302d28eaa33c4ef8a1e8015645b5c0ab/django_unfold-0.102.0.tar.gz", hash = "sha256:85162f48e402588863d9ae3c963d589535499f7326965899108c705f6b2586cf", size = 1125669, upload-time = "2026-07-27T08:49:55.239Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b6/a4/005e13a319d04eeba442f7923a63ce6a438939e209644671598ddcfb0f8f/django_unfold-0.102.0-py3-none-any.whl", hash = "sha256:08ac9f05331a8923b62f26fe7c82758cfd15cebc5c686e262127dab2553b43ab", size = 1252897, upload-time = "2026-07-27T08:49:53.501Z" },
 ]
 
 [[package]]
@@ -163,7 +187,9 @@ dependencies = [
     { name = "django-crispy-forms" },
     { name = "django-filter" },
     { name = "django-rich" },
+    { name = "django-role-permissions" },
     { name = "django-rql" },
+    { name = "django-unfold" },
     { name = "djangorestframework" },
     { name = "djangorestframework-simplejwt" },
     { name = "drf-spectacular" },
@@ -185,7 +211,9 @@ requires-dist = [
     { name = "django-crispy-forms", specifier = ">=2.6" },
     { name = "django-filter", specifier = ">=26.1" },
     { name = "django-rich", specifier = ">=2.2.0" },
+    { name = "django-role-permissions", specifier = ">=3.2.0" },
     { name = "django-rql", specifier = ">=4.4.1" },
+    { name = "django-unfold", specifier = ">=0.102.0" },
     { name = "djangorestframework", specifier = ">=3.17.1" },
     { name = "djangorestframework-simplejwt", specifier = ">=5.5.1" },
     { name = "drf-spectacular", specifier = ">=0.30.0" },
