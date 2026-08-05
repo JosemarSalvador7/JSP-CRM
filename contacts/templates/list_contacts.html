@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load permission_tags %}
 {% block contact_page %}active{% endblock contact_page %}
 
 {% block content %}
@@ -72,7 +73,11 @@
 </section>
 
 <div class="p-2">
-    <a href="{% url 'contacts:add' %}" class="btn bg-primary text-white">{% trans 'Adicionar Novo Contacto' %} <i class="fa-solid fa-address-book"></i></a>
+
+{% if user|can:'add_contact' %}
+        <a href="{% url 'contacts:add' %}" class="btn bg-primary text-white">{% trans 'Adicionar Novo Contacto' %} <i class="fa-solid fa-address-book"></i></a>
+{% endif %}
+    
     <a href="{% url 'contacts:pdf' %}" class="btn btn-outline-danger" target="_blank">{% trans 'Baixar Lista em pdf' %} <i class="fa-solid fa-file-pdf"></i></a>
 </div>
 
@@ -128,10 +133,17 @@
                         <td>{{ contact.email|default_if_none:"Não informado"}}</td>
                         <td>{{ contact.company|default_if_none:"Não informado" }}</td>
                         <td>{{ contact.job_title|default_if_none:"Não informado" }}</td>
-                        <td><a href="{% url 'contacts:delete' contact.pk %}" class="btn btn-danger" onclick="return confirm('{% trans 'Tem certeza que deseja excluir este Contacto? ' %}')">eliminar <i class="fa-regular fa-trash-can"></i></a>
+                        <td>
+                        {% if user|can:'delete_contact' %}
+                            <a href="{% url 'contacts:delete' contact.pk %}" class="btn btn-danger" onclick="return confirm('{% trans 'Tem certeza que deseja excluir este Contacto? ' %}')">eliminar <i class="fa-regular fa-trash-can"></i></a>
+                        {% endif %}
+
+                        {% if user|can:'update_contact'  %}
+                            <a href="{% url 'contacts:update' contact.pk %}" class="btn btn-warning">{% trans 'Editar' %}</a>
+                        {% endif %}
+
                         <a href="{% url 'contacts:retrieve' contact.pk  %}" class="btn btn-primary">ver mais</a>
-                           <a href="{% url 'contacts:update' contact.pk %}" class="btn btn-warning">{% trans 'Editar' %}</a>
-                           <a href="{% url 'contacts:retrievepdf' contact.pk %}" class="btn btn-outline-danger" target="_blank">{% trans 'Baixar pdf' %} <i class="fa-solid fa-file-pdf"></i> </a>
+                        <a href="{% url 'contacts:retrievepdf' contact.pk %}" class="btn btn-outline-danger" target="_blank">{% trans 'Baixar pdf' %} <i class="fa-solid fa-file-pdf"></i> </a>
                     </td>
                     </tr>
 {% empty %}
