@@ -84,7 +84,9 @@ def edit_view(requests, user_id):
     profile = Profile.objects.get(user_id=user)
     if requests.method == "POST":
         user.username = requests.POST.get("username") or user.username
-        user.set_password(requests.POST.get("password") or user.password)
+        password = requests.POST.get("password")
+        if password:
+            user.set_password(password)
         user.email = requests.POST.get("email") or user.email
         user.save()
         profile.role = requests.POST.get("role") or profile.role
