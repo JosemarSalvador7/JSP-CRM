@@ -136,28 +136,32 @@
         </div>
     </div>
 
-    <!-- Informações do Sistema -->
-    <h5 class="border-bottom pb-2 mb-3 mt-4">{% trans "Informações do Sistema" %}</h5>
-
-    <div class="mb-2">
-        <label class="text-muted small d-block">{% trans "Atribuído ao/a" %}</label>
-        <p class="mb-0">{{ contact.assigned_to.get_full_name|default:contact.assigned_to.username }}</p>
-    </div>
-
-    <div class="mb-2 d-flex" style="justify-content: space-between;">
-        <div class="w-50 me-2">
-            <label class="text-muted small d-block">{% trans "Criado por" %}</label>
-            <p class="mb-0">{{ contact.created_by.get_full_name|default:contact.created_by.username }}</p>
+{% if user|has_role:'manager' %}
+    
+        <!-- Informações do Sistema -->
+        <h5 class="border-bottom pb-2 mb-3 mt-4">{% trans "Informações do Sistema" %}</h5>
+    
+        <div class="mb-2">
+            <label class="text-muted small d-block">{% trans "Atribuído ao/a" %}</label>
+            <p class="mb-0">{{ contact.assigned_to.get_full_name|default:contact.assigned_to.username }}</p>
         </div>
-        <div class="w-50 ms-2">
-            <label class="text-muted small d-block">{% trans "Criado em" %}</label>
-            <p class="mb-0">{{ contact.created_at|date:"d/m/Y H:i" }}</p>
+    
+        <div class="mb-2 d-flex" style="justify-content: space-between;">
+            <div class="w-50 me-2">
+                <label class="text-muted small d-block">{% trans "Criado por" %}</label>
+                <p class="mb-0">{{ contact.created_by.get_full_name|default:contact.created_by.username }}</p>
+            </div>
+            <div class="w-50 ms-2">
+                <label class="text-muted small d-block">{% trans "Criado em" %}</label>
+                <p class="mb-0">{{ contact.created_at|date:"d/m/Y H:i" }}</p>
+            </div>
         </div>
-    </div>
-
-    <div class="mb-2">
-        <label class="text-muted small d-block">{% trans "Última atualização" %}</label>
-        <p class="mb-0">{{ contact.updated_at|date:"d/m/Y H:i" }}</p>
-    </div>
+    
+        <div class="mb-2">
+            <label class="text-muted small d-block">{% trans "Última atualização" %}</label>
+            <p class="mb-0">{{ contact.updated_at|date:"d/m/Y H:i" }}</p>
+        </div>
+{% endif %}
+    
 </section>
 {% endblock content %}
