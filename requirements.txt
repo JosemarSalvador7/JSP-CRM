@@ -7,7 +7,9 @@ django-crispy-forms==2.6
 django-debug-toolbar==7.0.0
 django-filter==26.1
 django-rich==2.2.0
+django-role-permissions==3.2.0
 django-rql==4.4.1
+django-unfold==0.102.0
 djangorestframework==3.17.1
 djangorestframework-simplejwt==5.5.1
 drf-spectacular==0.30.0
