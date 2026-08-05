@@ -1,19 +1,22 @@
 from rolepermissions.roles import AbstractUserRole
 
 
-class Gerente(AbstractUserRole):
+class Manager(AbstractUserRole):
     available_permissions = {
         "view_oputunities": True,
         "add_task": True,
         "add_opportunities": True,
-        "add_clients": True,
+        "add_contact": True,
+        'edit_contact': True,
         'view_contact': True,
         'view_contact_pdf': True,
         'view_contacts_pdf': True,
+        'delete_contact': True,
+        'update_contact':True,
     }
 
 
-class Vendedor(AbstractUserRole):
+class Seller(AbstractUserRole):
     available_permissions = {
         "view_oputunities": True,
         "add_task": False,

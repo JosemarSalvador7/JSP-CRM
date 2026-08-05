@@ -36,7 +36,7 @@ def logout_view(requests):
     return redirect("accounts:login")
 
 
-@has_role_decorator("gerente")
+@has_role_decorator("manager")
 @login_required()
 @atomic
 def register_view(requests):
@@ -49,15 +49,15 @@ def register_view(requests):
         user = User.objects.create_user(username=user, password=password, email=email)
         Profile.objects.create(user=user, role=role, avatar=avatar)  # type: ignore
         if role == "G":
-            assign_role(user, "gerente")
+            assign_role(user, "manager")
         elif role == "V":
-            assign_role(user, "vendedor")
+            assign_role(user, "seller")
         messages.success(requests, _("Usuario cadastrado com sucesso"))
         return redirect("accounts:register")
     return render(requests, "register.html", {"form": RegisterUserForm()})
 
 
-@has_role_decorator("gerente")
+@has_role_decorator("manager")
 @login_required()
 def list_view(requests):
     users = User.objects.only("username", "is_active", "email")
@@ -76,7 +76,7 @@ def list_view(requests):
     )
 
 
-@has_role_decorator("gerente")
+@has_role_decorator("manager")
 @login_required()
 @atomic
 def edit_view(requests, user_id):
@@ -93,11 +93,11 @@ def edit_view(requests, user_id):
         profile.avatar = requests.FILES.get("avatar") or profile.avatar  # type: ignore
         profile.save()
         if profile.role == "G":
-            remove_role(user, "vendedor")
-            assign_role(user, "gerente")
+            remove_role(user, "seller")
+            assign_role(user, "manager")
         elif profile.role == "V":
-            remove_role(user, "gerente")
-            assign_role(user, "vendedor")
+            remove_role(user, "manager")
+            assign_role(user, "seller")
         messages.success(requests, _("Dados do Usuario Atualizado com sucesso"))
         return redirect("accounts:list")
 
@@ -118,7 +118,7 @@ def edit_view(requests, user_id):
     )
 
 
-@has_role_decorator("gerente")
+@has_role_decorator("manager")
 @login_required()
 def delete_view(request, user_id):
     user = User.objects.get(id=user_id)
@@ -131,7 +131,7 @@ def delete_view(request, user_id):
     return redirect("accounts:list")
 
 
-@has_role_decorator("gerente")
+@has_role_decorator("manager")
 @login_required()
 def users_pdf_view(requets):
     pdf = FPDF()
