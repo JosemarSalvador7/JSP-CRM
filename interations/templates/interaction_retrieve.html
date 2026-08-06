@@ -85,12 +85,5 @@
             {{ interaction.updated_at|date:"d/m/Y H:i" }}
         </p>
     </div>
-
-    <!-- Botões inferiores -->
-    <div class="mt-4 d-flex gap-2">
-        <a href="{% url 'interactions:put' interaction.pk %}" class="btn btn-primary">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
-        <a href="{% url 'interactions:delete' interaction.pk %}" class="btn btn-danger" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta interação?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
-        <a href="{% url 'interactions:list' %}" class="btn btn-secondary">{% trans 'Voltar para lista' %} <i class="fa-solid fa-list"></i></a>
-    </div>
 </section>
 {% endblock content %}
