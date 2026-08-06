@@ -12,7 +12,7 @@ from accounts.forms import EditUserForm, FormLogin, RegisterUserForm
 from accounts.models import Profile
 
 # permissions
-from rolepermissions.roles import assign_role ,remove_role
+from rolepermissions.roles import assign_role, remove_role
 from rolepermissions.decorators import has_role_decorator
 
 

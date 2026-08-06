@@ -14,14 +14,18 @@ from django.contrib.auth.decorators import login_required
 from rolepermissions.decorators import has_permission_decorator
 
 
-
-@has_permission_decorator('view_contact_pdf')
+@has_permission_decorator("view_contact_pdf")
 @login_required()
 def retrievepdf(request, id):
-    if request.user.profile.role == 'G':
-       contact = get_object_or_404(Contact, Q(id=id,))
-    elif request.user.profile.role == 'V':
-        contact = get_object_or_404(Contact, Q(id=id,assigned_to=request.user))
+    if request.user.profile.role == "G":
+        contact = get_object_or_404(
+            Contact,
+            Q(
+                id=id,
+            ),
+        )
+    elif request.user.profile.role == "V":
+        contact = get_object_or_404(Contact, Q(id=id, assigned_to=request.user))
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Times", "B", 24)
@@ -138,7 +142,7 @@ def retrievepdf(request, id):
     )
 
 
-@has_permission_decorator('view_contacts_pdf')
+@has_permission_decorator("view_contacts_pdf")
 @login_required()
 def gerar_pdf(request):
     contacts = Contact.objects.all().filter(assigned_to=request.user)
@@ -204,14 +208,17 @@ def gerar_pdf(request):
     pdf_out = pdf.output(dest="S").encode("latin1")  # type:ignore
     return FileResponse(BytesIO(pdf_out), filename="contactos.pdf")
 
+
 @login_required()
 def list_contacts(request):
     print()
     if request.user.profile.role == "G":
         contacts_qs = Contact.objects.all()
     elif request.user.profile.role == "V":
-        contacts_qs = Contact.objects.only('id','name','surname','phone','email','company','job_title').filter(assigned_to=request.user)
-    
+        contacts_qs = Contact.objects.only(
+            "id", "name", "surname", "phone", "email", "company", "job_title"
+        ).filter(assigned_to=request.user)
+
     contact_filter = ContactFilter(request.GET, queryset=contacts_qs)
     filtered_contacts = contact_filter.qs
 
@@ -231,7 +238,8 @@ def list_contacts(request):
     }
     return render(request, "list_contacts.html", context)
 
-@has_permission_decorator('add_contact')
+
+@has_permission_decorator("add_contact")
 @login_required()
 def add_contacts(requests):
     form = ContactForm()
@@ -262,15 +270,16 @@ def add_contacts(requests):
         },
     )
 
-@has_permission_decorator('delete_contact')
+
+@has_permission_decorator("delete_contact")
 @login_required()
 def delete_contacts(requests, id):
-    # TODO: caso erro a elimiar mostrar mensaguem de contecto associado 
+    # TODO: caso erro a elimiar mostrar mensaguem de contecto associado
     try:
         contact = get_object_or_404(Contact, id=id)
         contact.delete()
     except Exception as e:
-       return HttpResponse(e)
+        return HttpResponse(e)
     messages.success(requests, _("Contacto Eliminado com sucesso"))
     return redirect("contacts:list")
 
@@ -288,7 +297,8 @@ def retrieve_contact(requests, id):
         },
     )
 
-@has_permission_decorator('update_contact')
+
+@has_permission_decorator("update_contact")
 @login_required()
 def update_contact(requests, id):
     contact = get_object_or_404(Contact, id=id)

@@ -12,7 +12,9 @@ class InteractionForm(forms.ModelForm):
                 attrs={"class": "form-control", "type": "datetime-local"}
             ),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
-            "contact": forms.Select(attrs={"class": "form-control"}),
+            "contact": forms.Select(
+                attrs={"class": "form-control"},
+            ),
         }
         labels = {
             "type_interaction": "Tipo de Interação",

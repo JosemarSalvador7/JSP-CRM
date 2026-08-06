@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from contacts.admin import Contact
 from interations.models import Interaction
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
@@ -42,6 +43,16 @@ def put_view(request, id):
     interaction = get_object_or_404(Interaction, id=id, created_by=request.user)
     if request.method == "POST":
         form = InteractionForm(request.POST, instance=interaction)
+        # limitar contatos ao usuário logado
+        try:
+            if request.user.profile.role == "G":
+                form.fields["contact"].queryset = Contact.objects.all()
+            else:
+                form.fields["contact"].queryset = Contact.objects.filter(
+                    assigned_to=request.user
+                )
+        except Exception:
+            pass
         if form.is_valid():
             form.save()
             messages.success(request, _("Interação atualizada com sucesso"))
@@ -50,6 +61,15 @@ def put_view(request, id):
             messages.error(request, _("Erro ao atualizar interação"))
     else:
         form = InteractionForm(instance=interaction)
+        try:
+            if request.user.profile.role == "G":
+                form.fields["contact"].queryset = Contact.objects.all()
+            else:
+                form.fields["contact"].queryset = Contact.objects.filter(
+                    assigned_to=request.user
+                )
+        except Exception:
+            pass
     return render(request, "interaction_post.html", {"form": form})
 
 
@@ -57,6 +77,15 @@ def put_view(request, id):
 def post_view(request):
     if request.method == "POST":
         form = InteractionForm(request.POST)
+        try:
+            if request.user.profile.role == "G":
+                form.fields["contact"].queryset = Contact.objects.all()
+            else:
+                form.fields["contact"].queryset = Contact.objects.filter(
+                    assigned_to=request.user
+                )
+        except Exception:
+            pass
         if form.is_valid():
             form_interaction = form.save(commit=False)
             form_interaction.created_by = request.user
@@ -67,6 +96,15 @@ def post_view(request):
             messages.error(request, _("Erro ao cadastrar interação"))
     else:
         form = InteractionForm()
+        try:
+            if request.user.profile.role == "G":
+                form.fields["contact"].queryset = Contact.objects.all()
+            else:
+                form.fields["contact"].queryset = Contact.objects.filter(
+                    assigned_to=request.user
+                )
+        except Exception:
+            pass
     return render(request, "interaction_post.html", {"form": form})
 
 
