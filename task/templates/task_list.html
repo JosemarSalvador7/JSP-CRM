@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-
+{% load permission_tags %}
 {% block task_page %}active{% endblock task_page %}
 
 {% block content %}
@@ -69,11 +69,16 @@
 </section>
 
 <div class="p-2">
-    <a href="{% url 'tasks:post' %}" class="btn bg-primary text-white">{% trans 'Nova Tarefa' %} <i class="fa-solid fa-plus"></i></a>
+
+{% if user|can:"add_task" %}
+        <a href="{% url 'tasks:post' %}" class="btn bg-primary text-white">{% trans 'Nova Tarefa' %} <i class="fa-solid fa-plus"></i></a>
+{% endif %}
+    
     <a href="{% url 'tasks:pdf' %}" class="btn btn-outline-danger" target="_blank">{% trans 'Baixar Lista em PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
 </div>
 
-<section class='bg-light rounded-3 mt-3 p-3'>
+<section class="bg-light rounded-3 mt-3 p-3">
+    
     <div class="table-responsive">
         <table class="table table-striped table-bordered align-middle">
             <thead>
@@ -118,8 +123,12 @@
                     </td>
                     <td>
                         <a href="{% url 'tasks:retrieve' task.pk %}" class="btn btn-info btn-sm">{% trans 'Ver' %} <i class="fa-solid fa-eye"></i></a>
-                        <a href="{% url 'tasks:put' task.pk %}" class="btn btn-warning btn-sm">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
-                        <a href="{% url 'tasks:delete' task.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta tarefa?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+                            {% if user|can:'update_task' %}
+                            <a href="{% url 'tasks:put' task.pk %}" class="btn btn-warning btn-sm">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
+                            {% endif %}
+                            {% if user|can:'delete_task' %}
+                            <a href="{% url 'tasks:delete' task.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta tarefa?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+                            {% endif %}
                         <a href="{% url 'tasks:retrievepdf' task.pk %}" class="btn btn-outline-danger btn-sm" target="_blank">{% trans 'PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
                     </td>
                 </tr>

@@ -14,8 +14,6 @@ class Manager(AbstractUserRole):
         "delete_contact": True,
         "update_contact": True,
     }
-
-
 class Seller(AbstractUserRole):
     available_permissions = {
         "view_oputunities": True,
@@ -28,4 +26,6 @@ class Seller(AbstractUserRole):
         "view_contacts_pdf": True,
         "delete_contact": False,
         "update_contact": False,
+        "update_task": False,
+        "delete_task": False,
     }

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-
+{% load permission_tags %}
 {% block task_page %}active{% endblock task_page %}
 
 {% block content %}
@@ -11,8 +11,12 @@
         <h1 class="mb-0">{{ task.title|capfirst }}</h1>
         <div class="d-flex gap-2">
             <a href="{% url 'tasks:retrievepdf' task.pk %}" class="btn btn-outline-danger" target="_blank">{% trans 'PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
-            <a href="{% url 'tasks:put' task.pk %}" class="btn btn-primary">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
-            <a href="{% url 'tasks:delete' task.pk %}" class="btn btn-danger" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta tarefa?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+            {% if user|can:'update_task' %}
+            <a href="{% url 'tasks:put' task.pk %}" class="btn btn-warning btn-sm">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
+            {% endif %}
+            {% if user|can:'delete_task' %}
+            <a href="{% url 'tasks:delete' task.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta tarefa?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+            {% endif %}
             <a href="{% url 'tasks:list' %}" class="btn btn-secondary">{% trans 'Voltar' %} <i class="fa-solid fa-arrow-left"></i></a>
         </div>
     </div>
@@ -106,11 +110,6 @@
         </p>
     </div>
 
-    <!-- Botões inferiores -->
-    <div class="mt-4 d-flex gap-2">
-        <a href="{% url 'tasks:put' task.pk %}" class="btn btn-primary">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
-        <a href="{% url 'tasks:delete' task.pk %}" class="btn btn-danger" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta tarefa?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
-        <a href="{% url 'tasks:list' %}" class="btn btn-secondary">{% trans 'Voltar para lista' %} <i class="fa-solid fa-list"></i></a>
-    </div>
+
 </section>
 {% endblock content %}

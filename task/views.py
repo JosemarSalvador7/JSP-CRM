@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import FileResponse
 from fpdf import FPDF
 from io import BytesIO
+from rolepermissions.decorators import has_permission_decorator
 
 
 @login_required()
@@ -42,7 +43,7 @@ def retrieve_view(request, id):
     task = get_object_or_404(Task, id=id, created_by=request.user)
     return render(request, "task_retrieve.html", {"task": task})
 
-
+@has_permission_decorator('add_task')
 @login_required()
 def post_view(request):
     if request.method == "POST":
@@ -61,6 +62,7 @@ def post_view(request):
     return render(request, "task_post.html", {"form": form})
 
 
+@has_permission_decorator('update_task')
 @login_required()
 def put_view(request, id):
     task = get_object_or_404(Task, id=id, created_by=request.user)
@@ -78,7 +80,7 @@ def put_view(request, id):
 
     return render(request, "task_post.html", {"form": form})
 
-
+@has_permission_decorator('delete_task')
 @login_required()
 def delete_view(request, id):
     task = get_object_or_404(Task, id=id, created_by=request.user)
@@ -90,9 +92,12 @@ def delete_view(request, id):
 @login_required()
 def gerar_pdf_tasks(request):
     """Gera PDF com a lista de todas as tarefas do usuário"""
-    tasks = Task.objects.filter(created_by=request.user).select_related(
-        "assigned_to", "contact"
-    )
+    if request.user.profile.role == "V":
+        tasks = Task.objects.filter(created_by=request.user).select_related(
+            "assigned_to", "contact"
+        )
+    else:
+        tasks = Task.objects.all()
 
     pdf = FPDF()
     pdf.add_page(orientation="landscape")
