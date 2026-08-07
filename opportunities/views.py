@@ -10,13 +10,21 @@ from django.http import FileResponse
 from fpdf import FPDF
 from io import BytesIO
 
+from rolepermissions.decorators import has_role_decorator
+
 
 @login_required()
 def list_view(request):
     """Lista todas as oportunidades com filtros"""
-    opportunities = Opportunity.objects.filter(created_by=request.user).select_related(
-        "contact", "assigned_to", "created_by"
-    )
+    if request.user.profile.role == "G":
+        opportunities = Opportunity.objects.all().select_related(
+            "contact", "assigned_to", "created_by"
+        )
+    else:
+        opportunities = Opportunity.objects.filter(assigned_to=request.user).select_related(
+            "contact", "assigned_to", "created_by"
+        )
+        
 
     # Filtro por estágio
     stage_filter = request.GET.get("stage", "")
@@ -114,6 +122,7 @@ def retrieve_view(request, id):
     return render(request, "opportunity_retrieve.html", {"opportunity": opportunity})
 
 
+@has_role_decorator('gerente')
 @login_required()
 def post_view(request):
     if request.method == "POST":
@@ -129,7 +138,7 @@ def post_view(request):
                 request, _("Erro ao criar oportunidade. Verifique os dados.")
             )
     else:
-        form = OpportunityForm(user=request.user)
+        form = OpportunityForm()
 
     return render(request, "opportunity_post.html", {"form": form})
 
@@ -137,7 +146,7 @@ def post_view(request):
 @login_required()
 def put_view(request, id):
     opportunity = get_object_or_404(Opportunity, id=id, created_by=request.user)
-
+    form = OpportunityForm(request.POST, instance=opportunity, user=request.user)
     if request.method == "POST":
         form = OpportunityForm(request.POST, instance=opportunity, user=request.user)
         if form.is_valid():
@@ -149,7 +158,7 @@ def put_view(request, id):
                 request, _("Erro ao atualizar oportunidade. Verifique os dados.")
             )
     else:
-        form = OpportunityForm(instance=opportunity, user=request.user)
+        form = OpportunityForm(instance=opportunity)
 
     return render(request, "opportunity_post.html", {"form": form})
 
