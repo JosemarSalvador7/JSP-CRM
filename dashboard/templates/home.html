@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-
+{% load permission_tags %}
 {% block home_page %}active{% endblock home_page %}
 
 {% block content %}
@@ -416,74 +416,78 @@
     </div>
 </div>
 
-<!-- Links Rápidos -->
-<div class="row">
-    <div class="col-12">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0">
-                    <i class="fa-solid fa-rocket"></i> 
-                    {% trans 'Ações Rápidas' %}
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-2">
-                    <div class="col-6 col-md-2">
-                        <a href="{% url 'contacts:add' %}" class="btn btn-outline-primary w-100">
-                            <i class="fa-solid fa-user-plus"></i> 
-                            {% trans 'Contato' %}
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-2">
-                        <a href="{% url 'interactions:post' %}" class="btn btn-outline-success w-100">
-                            <i class="fa-solid fa-comment-plus"></i> 
-                            {% trans 'Interação' %}
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-2">
-                        <a href="{% url 'tasks:post' %}" class="btn btn-outline-info w-100">
-                            <i class="fa-solid fa-plus"></i> 
-                            {% trans 'Tarefa' %}
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-2">
-                        <a href="{% url 'opportunities:post' %}" class="btn btn-outline-warning w-100">
-                            <i class="fa-solid fa-plus"></i> 
-                            {% trans 'Oportunidade' %}
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-2">
-                        <a href="{% url 'opportunities:kanban' %}" class="btn btn-outline-info w-100">
-                            <i class="fa-solid fa-table-columns"></i> 
-                            {% trans 'Kanban' %}
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-2">
-                        <a href="{% url 'contacts:list' %}" class="btn btn-outline-secondary w-100">
-                            <i class="fa-solid fa-list"></i> 
-                            {% trans 'Ver Tudo' %}
-                        </a>
+
+{% if user|has_role:"gerente" %}
+    <!-- Links Rápidos -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fa-solid fa-rocket"></i> 
+                        {% trans 'Ações Rápidas' %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-6 col-md-2">
+                            <a href="{% url 'contacts:add' %}" class="btn btn-outline-primary w-100">
+                                <i class="fa-solid fa-user-plus"></i> 
+                                {% trans 'Contato' %}
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <a href="{% url 'interactions:post' %}" class="btn btn-outline-success w-100">
+                                <i class="fa-solid fa-comment-plus"></i> 
+                                {% trans 'Interação' %}
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <a href="{% url 'tasks:post' %}" class="btn btn-outline-info w-100">
+                                <i class="fa-solid fa-plus"></i> 
+                                {% trans 'Tarefa' %}
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <a href="{% url 'opportunities:post' %}" class="btn btn-outline-warning w-100">
+                                <i class="fa-solid fa-plus"></i> 
+                                {% trans 'Oportunidade' %}
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <a href="{% url 'opportunities:kanban' %}" class="btn btn-outline-info w-100">
+                                <i class="fa-solid fa-table-columns"></i> 
+                                {% trans 'Kanban' %}
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <a href="{% url 'contacts:list' %}" class="btn btn-outline-secondary w-100">
+                                <i class="fa-solid fa-list"></i> 
+                                {% trans 'Ver Tudo' %}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- Estatísticas do Sistema -->
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card shadow-sm border-0">
-            <div class="card-body text-center text-muted">
-                <small>
-                    <i class="fa-solid fa-users"></i> 
-                    {% trans 'Usuários no sistema:' %} {{ total_users }} | 
-                    <i class="fa-solid fa-address-book"></i> 
-                    {% trans 'Total de contatos:' %} {{ total_system_contacts }}
-                </small>
+    
+    <!-- Estatísticas do Sistema -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center text-muted">
+                    <small>
+                        <i class="fa-solid fa-users"></i> 
+                        {% trans 'Usuários no sistema:' %} {{ total_users }} | 
+                        <i class="fa-solid fa-address-book"></i> 
+                        {% trans 'Total de contatos:' %} {{ total_system_contacts }}
+                    </small>
+                </div>
             </div>
         </div>
     </div>
-</div>
+{% endif %}
+    
 
 {% endblock content %}

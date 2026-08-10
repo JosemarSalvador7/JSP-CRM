@@ -8,8 +8,7 @@ from datetime import timedelta
 from contacts.models import Contact
 from interations.models import Interaction
 from task.models import Task
-from opportunities.models import Opportunity  # 🔥 Adicionar import
-
+from opportunities.models import Opportunity
 # Create your views here.
 
 
@@ -19,127 +18,104 @@ def home_view(request):
     user = request.user
 
     # ==================== CONTATOS ====================
-    total_contacts = Contact.objects.filter(created_by=user).count()
-    contacts_with_email = (
-        Contact.objects.filter(created_by=user)
-        .filter(Q(email__isnull=False) & ~Q(email=""))
-        .count()
-    )
-    contacts_without_email = (
-        Contact.objects.filter(created_by=user)
-        .filter(Q(email__isnull=True) | Q(email=""))
-        .count()
-    )
-    contacts_with_company = (
-        Contact.objects.filter(created_by=user)
-        .filter(Q(company__isnull=False) & ~Q(company=""))
-        .count()
-    )
+    if request.user.profile.role == "G":
+        contacts = Contact.objects.all()
+    else:
+        contacts = Contact.objects.filter(assigned_to=user)
+
+    total_contacts = contacts.count()
+
+    contacts_with_email = contacts.filter(Q(email__isnull=False) & ~Q(email="")).count()
+    contacts_without_email = contacts.filter(
+        Q(email__isnull=True) | Q(email="")
+    ).count()
+    contacts_with_company = contacts.filter(
+        Q(company__isnull=False) & ~Q(company="")
+    ).count()
 
     # Últimos contatos adicionados
-    recent_contacts = Contact.objects.filter(created_by=user).order_by("-created_at")[
-        :5
-    ]
+    recent_contacts = contacts.order_by("-created_at")[:5]
 
     # ==================== INTERAÇÕES ====================
-    total_interactions = Interaction.objects.filter(created_by=user).count()
-    calls_count = Interaction.objects.filter(
-        created_by=user, type_interaction="C"
-    ).count()
-    emails_count = Interaction.objects.filter(
-        created_by=user, type_interaction="E"
-    ).count()
-    meetings_count = Interaction.objects.filter(
-        created_by=user, type_interaction="M"
-    ).count()
+
+    if request.user.profile.role == "G":
+        interactions = Interaction.objects.all()
+    else:
+        interactions = Interaction.objects.filter(created_by=user)
+
+    total_interactions = interactions.count()
+    calls_count = interactions.filter(type_interaction="C").count()
+    emails_count = interactions.filter(type_interaction="E").count()
+    meetings_count = interactions.filter(type_interaction="M").count()
 
     # Últimas interações
-    recent_interactions = (
-        Interaction.objects.filter(created_by=user)
-        .select_related("contact")
-        .order_by("-date_time")[:5]
-    )
+    recent_interactions = interactions.order_by("-date_time")[:5]
 
     # ==================== TAREFAS ====================
-    total_tasks = Task.objects.filter(created_by=user).count()
-    pending_tasks = Task.objects.filter(created_by=user, status="PENDING").count()
-    in_progress_tasks = Task.objects.filter(
-        created_by=user, status="IN_PROGRESS"
-    ).count()
-    done_tasks = Task.objects.filter(created_by=user, status="DONE").count()
+    if request.user.profile.role == "G":
+        tasks = Task.objects.all()
+    else:
+        tasks = Task.objects.filter(assigned_to=user)
+
+    total_tasks = tasks.count()
+    pending_tasks = tasks.filter(status="PENDING").count()
+    in_progress_tasks = tasks.filter(status="IN_PROGRESS").count()
+    done_tasks = tasks.filter(status="DONE").count()
 
     # Tarefas com vencimento próximo (próximos 7 dias)
     today = timezone.now().date()
     next_week = today + timedelta(days=7)
-    upcoming_tasks = Task.objects.filter(
-        created_by=user,
+    upcoming_tasks = tasks.filter(
         due_date__gte=today,
         due_date__lte=next_week,
         status__in=["PENDING", "IN_PROGRESS"],
     ).order_by("due_date")[:5]
 
     # Tarefas atrasadas
-    overdue_tasks = Task.objects.filter(
-        created_by=user, due_date__lt=today, status__in=["PENDING", "IN_PROGRESS"]
+    overdue_tasks = tasks.filter(
+        due_date__lt=today, status__in=["PENDING", "IN_PROGRESS"]
     ).order_by("due_date")[:5]
 
     # Estatísticas de tarefas por prioridade
-    high_priority_tasks = Task.objects.filter(created_by=user, priority="HIGH").count()
-    medium_priority_tasks = Task.objects.filter(
-        created_by=user, priority="MEDIUM"
-    ).count()
-    low_priority_tasks = Task.objects.filter(created_by=user, priority="LOW").count()
+    high_priority_tasks = tasks.filter(priority="HIGH").count()
+
+    medium_priority_tasks = tasks.filter(priority="MEDIUM").count()
+    low_priority_tasks = tasks.filter(priority="LOW").count()
 
     # ==================== OPORTUNIDADES ====================
-    total_opportunities = Opportunity.objects.filter(created_by=user).count()
+    if request.user.profile.role == "G":
+        opportunities = Opportunity.objects.all()
+    else:
+        opportunities = Opportunity.objects.filter(assigned_to=user)
+
+    total_opportunities = opportunities.count()
 
     # Oportunidades por estágio
-    prospecting_count = Opportunity.objects.filter(
-        created_by=user, stage="PROSPECTING"
-    ).count()
-    qualification_count = Opportunity.objects.filter(
-        created_by=user, stage="QUALIFICATION"
-    ).count()
-    proposal_count = Opportunity.objects.filter(
-        created_by=user, stage="PROPOSAL"
-    ).count()
-    negotiation_count = Opportunity.objects.filter(
-        created_by=user, stage="NEGOTIATION"
-    ).count()
-    closed_won_count = Opportunity.objects.filter(
-        created_by=user, stage="CLOSED_WON"
-    ).count()
-    closed_lost_count = Opportunity.objects.filter(
-        created_by=user, stage="CLOSED_LOST"
-    ).count()
+    prospecting_count = opportunities.filter(stage="PROSPECTING").count()
+    qualification_count = opportunities.filter(stage="QUALIFICATION").count()
+    proposal_count = opportunities.filter(stage="PROPOSAL").count()
+    negotiation_count = opportunities.filter(stage="NEGOTIATION").count()
+    closed_won_count = opportunities.filter(stage="CLOSED_WON").count()
+    closed_lost_count = opportunities.filter(stage="CLOSED_LOST").count()
 
     # Valor total das oportunidades
-    total_opportunity_value = (
-        Opportunity.objects.filter(created_by=user).aggregate(Sum("value"))[
-            "value__sum"
-        ]
-        or 0
-    )
+    total_opportunity_value = opportunities.aggregate(Sum("value"))["value__sum"] or 0
 
     # Oportunidades em andamento (excluindo fechadas)
-    active_opportunities = (
-        Opportunity.objects.filter(created_by=user)
-        .exclude(stage__in=["CLOSED_WON", "CLOSED_LOST"])
-        .count()
-    )
+    active_opportunities = opportunities.exclude(
+        stage__in=["CLOSED_WON", "CLOSED_LOST"]
+    ).count()
 
     # Últimas oportunidades adicionadas
-    recent_opportunities = (
-        Opportunity.objects.filter(created_by=user)
-        .select_related("contact")
-        .order_by("-created_at")[:5]
-    )
+    recent_opportunities = opportunities.select_related("contact").order_by(
+        "-created_at"
+    )[:5]
 
     # ==================== ATIVIDADE RECENTE ====================
     recent_activity = []
 
     # Adiciona contatos recentes
-    for contact in Contact.objects.filter(created_by=user).order_by("-updated_at")[:3]:
+    for contact in contacts.order_by("-updated_at")[:3]:
         recent_activity.append(
             {
                 "type": "contact",
@@ -151,9 +127,7 @@ def home_view(request):
         )
 
     # Adiciona interações recentes
-    for interaction in Interaction.objects.filter(created_by=user).order_by(
-        "-updated_at"
-    )[:3]:
+    for interaction in interactions.order_by("-updated_at")[:3]:
         recent_activity.append(
             {
                 "type": "interaction",
@@ -165,7 +139,7 @@ def home_view(request):
         )
 
     # Adiciona tarefas recentes
-    for task in Task.objects.filter(created_by=user).order_by("-updated_at")[:3]:
+    for task in tasks.order_by("-updated_at")[:3]:
         recent_activity.append(
             {
                 "type": "task",
@@ -177,7 +151,7 @@ def home_view(request):
         )
 
     # Adiciona oportunidades recentes
-    for opp in Opportunity.objects.filter(created_by=user).order_by("-updated_at")[:3]:
+    for opp in opportunities.order_by("-updated_at")[:3]:
         recent_activity.append(
             {
                 "type": "opportunity",
