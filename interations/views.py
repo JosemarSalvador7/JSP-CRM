@@ -56,7 +56,7 @@ def put_view(request, id):
         if form.is_valid():
             form.save()
             messages.success(request, _("Interação atualizada com sucesso"))
-            return redirect("interations:list")
+            return redirect("interactions:list")
         else:
             messages.error(request, _("Erro ao atualizar interação"))
     else:
@@ -91,7 +91,7 @@ def post_view(request):
             form_interaction.created_by = request.user
             form_interaction.save()
             messages.success(request, _("Interação cadastrada com sucesso"))
-            return redirect("interations:list")
+            return redirect("interactions:list")
         else:
             messages.error(request, _("Erro ao cadastrar interação"))
     else:
@@ -113,7 +113,7 @@ def delete_view(request, id):
     interaction = get_object_or_404(Interaction, id=id, created_by=request.user)
     interaction.delete()
     messages.success(request, _("Interação deletada com sucesso"))
-    return redirect("interations:list")
+    return redirect("interactions:list")
 
 
 @login_required()

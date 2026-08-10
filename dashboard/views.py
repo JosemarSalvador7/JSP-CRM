@@ -134,7 +134,7 @@ def home_view(request):
                 "action": "registrou",
                 "object": f"Interação com {interaction.contact.name} {interaction.contact.surname}",
                 "date": interaction.updated_at,
-                "url": f"/pt/interations/retrieve/{interaction.pk}/",
+                "url": f"/pt/interactions/retrieve/{interaction.pk}/",
             }
         )
 
