@@ -31,7 +31,7 @@ class Opportunity(models.Model):
         verbose_name="Contato",
         related_name="opportunities",
     )
-    
+
     assigned_to = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -46,8 +46,7 @@ class Opportunity(models.Model):
         verbose_name="Criado por",
         related_name="opportunities_created",
         null=True,
-        blank=True
-        
+        blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

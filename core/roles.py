@@ -14,18 +14,25 @@ class Manager(AbstractUserRole):
         "delete_contact": True,
         "update_contact": True,
     }
+
+
 class Seller(AbstractUserRole):
     available_permissions = {
-        "view_oputunities": True,
         "add_task": False,
         "add_opportunities": False,
         "add_contact": False,
-        "edit_contact": False,
         "view_contact": True,
+        "view_opportunities": True,
         "view_contact_pdf": True,
         "view_contacts_pdf": True,
-        "delete_contact": False,
+        "view_retrievepdf_opportunities": True,
         "update_contact": False,
+        "update_opportunities": False,
         "update_task": False,
         "delete_task": False,
+        "delete_contact": False,
+        "delete_opportunities": False,
+        "view_kamba_opportunities": True,
+        "update_retrieve_opportunities": True,
+        "opportunities_pdf":True,
     }

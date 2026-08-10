@@ -10,9 +10,10 @@ from django.http import FileResponse
 from fpdf import FPDF
 from io import BytesIO
 
-from rolepermissions.decorators import has_role_decorator
+from rolepermissions.decorators import has_role_decorator, has_permission_decorator
 
 
+@has_permission_decorator("view_opportunities")
 @login_required()
 def list_view(request):
     """Lista todas as oportunidades com filtros"""
@@ -21,10 +22,9 @@ def list_view(request):
             "contact", "assigned_to", "created_by"
         )
     else:
-        opportunities = Opportunity.objects.filter(assigned_to=request.user).select_related(
-            "contact", "assigned_to", "created_by"
-        )
-        
+        opportunities = Opportunity.objects.filter(
+            assigned_to=request.user
+        ).select_related("contact", "assigned_to", "created_by")
 
     # Filtro por estágio
     stage_filter = request.GET.get("stage", "")
@@ -74,12 +74,18 @@ def list_view(request):
     return render(request, "opportunity_list.html", context)
 
 
+@has_permission_decorator("view_kamba_opportunities")
 @login_required()
 def kanban_view(request):
     """Visualização Kanban das oportunidades"""
-    opportunities = Opportunity.objects.filter(created_by=request.user).select_related(
-        "contact", "assigned_to"
-    )
+    if request.user.profile.role == "G":
+        opportunities = Opportunity.objects.all().select_related(
+            "contact", "assigned_to", "created_by"
+        )
+    else:
+        opportunities = Opportunity.objects.filter(
+            assigned_to=request.user
+        ).select_related("contact", "assigned_to", "created_by")
 
     # Organiza por estágio
     stages = dict(Opportunity.STAGE_CHOICES)
@@ -116,13 +122,17 @@ def kanban_view(request):
     return render(request, "opportunity_kanban.html", context)
 
 
+@has_permission_decorator("update_retrieve_opportunities")
 @login_required()
 def retrieve_view(request, id):
-    opportunity = get_object_or_404(Opportunity, id=id, created_by=request.user)
+    opportunity = get_object_or_404(
+        Opportunity,
+        id=id,
+    )
     return render(request, "opportunity_retrieve.html", {"opportunity": opportunity})
 
 
-@has_role_decorator('gerente')
+@has_role_decorator("gerente")
 @login_required()
 def post_view(request):
     if request.method == "POST":
@@ -143,9 +153,14 @@ def post_view(request):
     return render(request, "opportunity_post.html", {"form": form})
 
 
+@has_permission_decorator("update_opportunities")
 @login_required()
 def put_view(request, id):
-    opportunity = get_object_or_404(Opportunity, id=id, created_by=request.user)
+    if request.user.profile.role == "V":
+        opportunity = get_object_or_404(Opportunity, id=id, assigned_to=request.user)
+    else:
+        opportunity = get_object_or_404(Opportunity, id=id)
+
     form = OpportunityForm(request.POST, instance=opportunity, user=request.user)
     if request.method == "POST":
         form = OpportunityForm(request.POST, instance=opportunity, user=request.user)
@@ -163,6 +178,7 @@ def put_view(request, id):
     return render(request, "opportunity_post.html", {"form": form})
 
 
+@has_permission_decorator("delete_opportunities")
 @login_required()
 def delete_view(request, id):
     opportunity = get_object_or_404(Opportunity, id=id, created_by=request.user)
@@ -171,10 +187,14 @@ def delete_view(request, id):
     return redirect("opportunities:list")
 
 
+@has_permission_decorator("view_kamba_opportunities")
 @login_required()
 def update_stage_view(request, id):
     """Atualiza apenas o estágio da oportunidade (para o Kanban)"""
-    opportunity = get_object_or_404(Opportunity, id=id, created_by=request.user)
+    if request.user.role.profile == "V":
+        opportunity = get_object_or_404(Opportunity, id=id, assigned_to=request.user)
+    else:
+        opportunity = get_object_or_404(Opportunity, id=id)
 
     if request.method == "POST":
         new_stage = request.POST.get("stage")
@@ -188,12 +208,14 @@ def update_stage_view(request, id):
     return redirect("opportunities:list")
 
 
+@has_permission_decorator("opportunities_pdf")
 @login_required()
 def gerar_pdf_opportunities(request):
     """Gera PDF com a lista de todas as oportunidades"""
-    opportunities = Opportunity.objects.filter(created_by=request.user).select_related(
-        "contact", "assigned_to"
-    )
+    if request.user.profile.role == "G":
+        opportunities = Opportunity.objects.all()
+    else:
+        opportunities = Opportunity.objects.filter(assigned_to=request.user)
 
     pdf = FPDF()
     pdf.add_page(orientation="landscape")
@@ -202,6 +224,7 @@ def gerar_pdf_opportunities(request):
     pdf.set_title("Lista de Oportunidades")
 
     # Título
+
     pdf.cell(w=120, h=30)
     pdf.cell(w=60, h=0, txt="LISTA DE OPORTUNIDADES", ln=1, align="c")
     pdf.set_font("Times", "", 10)
@@ -271,10 +294,14 @@ def gerar_pdf_opportunities(request):
     )
 
 
+@has_permission_decorator("view_retrievepdf_opportunities")
 @login_required()
 def retrievepdf_opportunity(request, id):
     """Gera PDF de uma oportunidade específica"""
-    opportunity = get_object_or_404(Opportunity, id=id, created_by=request.user)
+    if request.user.profile.role == "G":
+        opportunity = get_object_or_404(Opportunity, id=id)
+    else:
+        opportunity = get_object_or_404(Opportunity, id=id, assigned_to=request.user)
 
     pdf = FPDF()
     pdf.add_page()

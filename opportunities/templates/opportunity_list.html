@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load permission_tags %}
 
 {% block opportunity_page %}active{% endblock opportunity_page %}
 
@@ -75,7 +76,11 @@
 </section>
 
 <div class="p-2">
-    <a href="{% url 'opportunities:post' %}" class="btn bg-primary text-white">{% trans 'Nova Oportunidade' %} <i class="fa-solid fa-plus"></i></a>
+
+{% if user|can:'add_opportunities' %}
+        <a href="{% url 'opportunities:post' %}" class="btn bg-primary text-white">{% trans 'Nova Oportunidade' %} <i class="fa-solid fa-plus"></i></a>
+{% endif %}
+    
     <a href="{% url 'opportunities:kanban' %}" class="btn btn-info text-white">{% trans 'Kanban' %} <i class="fa-solid fa-table-columns"></i></a>
     <a href="{% url 'opportunities:pdf' %}" class="btn btn-outline-danger" target="_blank">{% trans 'Baixar Lista em PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
 </div>
@@ -148,11 +153,24 @@
                     <td>{{ opp.assigned_to.get_full_name|default:opp.assigned_to.username|default:"-" }}</td>
                     <td>{{ opp.created_at|date:"d/m/Y" }}</td>
                     <td>
-                        <a href="{% url 'opportunities:retrieve' opp.pk %}" class="btn btn-info btn-sm">{% trans 'Ver' %} <i class="fa-solid fa-eye"></i></a>
-                        <a href="{% url 'opportunities:put' opp.pk %}" class="btn btn-warning btn-sm">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
-                        <a href="{% url 'opportunities:delete' opp.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta oportunidade?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
-                        <a href="{% url 'opportunities:retrievepdf' opp.pk %}" class="btn btn-outline-danger btn-sm" target="_blank">{% trans 'PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
-                    </td>
+        <a href="{% url 'opportunities:retrieve' opp.pk %}" class="btn btn-info btn-sm">{% trans 'Ver' %} <i class="fa-solid fa-eye"></i></a>
+        {% if user|can:'view_retrievepdf_opportunities' %}
+        <a href="{% url 'opportunities:retrievepdf' opp.pk %}" class="btn btn-outline-danger" target="_blank">{% trans 'PDF' %} <i class="fa-solid fa-file-pdf"></i></a>
+        {% endif %}
+
+
+        {% if user|can:'add_opportunities' %}
+        <a href="{% url 'opportunities:put' opp.pk %}" class="btn btn-primary">{% trans 'Editar' %} <i class="fa-solid fa-pen"></i></a>
+        {% endif %}
+
+
+        {% if user|can:'delete_opportunities' %}
+        <a href="{% url 'opportunities:delete' opp.pk %}" class="btn btn-danger" onclick="return confirm('{% trans "Tem certeza que deseja excluir esta oportunidade?" %}');">{% trans 'Excluir' %} <i class="fa-regular fa-trash-can"></i></a>
+        {% endif %}
+    
+            <a href="{% url 'opportunities:list' %}" class="btn btn-secondary">{% trans 'Voltar' %} <i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+                </td>
                 </tr>
                 {% empty %}
                 <tr>

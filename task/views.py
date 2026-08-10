@@ -43,7 +43,8 @@ def retrieve_view(request, id):
     task = get_object_or_404(Task, id=id, created_by=request.user)
     return render(request, "task_retrieve.html", {"task": task})
 
-@has_permission_decorator('add_task')
+
+@has_permission_decorator("add_task")
 @login_required()
 def post_view(request):
     if request.method == "POST":
@@ -62,7 +63,7 @@ def post_view(request):
     return render(request, "task_post.html", {"form": form})
 
 
-@has_permission_decorator('update_task')
+@has_permission_decorator("update_task")
 @login_required()
 def put_view(request, id):
     task = get_object_or_404(Task, id=id, created_by=request.user)
@@ -80,7 +81,8 @@ def put_view(request, id):
 
     return render(request, "task_post.html", {"form": form})
 
-@has_permission_decorator('delete_task')
+
+@has_permission_decorator("delete_task")
 @login_required()
 def delete_view(request, id):
     task = get_object_or_404(Task, id=id, created_by=request.user)
