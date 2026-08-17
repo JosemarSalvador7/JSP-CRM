@@ -34,7 +34,7 @@ class Contact(models.Model):
         User,
         on_delete=models.DO_NOTHING,
         related_name="assigned_contacts",
-        verbose_name=_("Atribuído a"),
+        verbose_name=_("Atribuído a/ao"),
     )
     created_by = models.ForeignKey(
         User,

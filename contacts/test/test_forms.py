@@ -38,4 +38,6 @@ class TestContact(TestCase):
 
         form_result = form.is_valid()
 
-        return self.assertFalse(form_result,)
+        return self.assertFalse(
+            form_result,
+        )
