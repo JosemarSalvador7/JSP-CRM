@@ -54,7 +54,7 @@ class OpportunityForm(forms.ModelForm):
 
         # Filtra os contatos para mostrar apenas do usuário
         if user:
-            self.fields["contact"].queryset = Contact.objects.filter(created_by=user)
+            self.fields["contact"].queryset = Contact.objects.filter(created_by=user).select_related('contact')
 
         # Filtra usuários para atribuição
         self.fields["assigned_to"].queryset = User.objects.filter(is_active=True)
