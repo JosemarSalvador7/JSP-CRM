@@ -15,7 +15,7 @@ class ContactForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs.update({"class": "form-control"})
 
-            if field.label != _("Atribuído a"):
+            if field.label != _("Atribuído a/ao"):
                 field.validators.append(
                     validate_no_emoji,
                 )

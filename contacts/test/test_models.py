@@ -26,3 +26,11 @@ class TestContactsTestCase(TestCase):
         result = c1.__str__() == result
 
         return self.assertTrue(result)
+
+    def test_if_data_is_equal(self):
+        c1 = Contact.objects.get(name="josef")
+        self.assertEqual(c1.name, "josef")
+        self.assertEqual(c1.surname, "da costa")
+        self.assertEqual(c1.phone, "949160426")
+        self.assertEqual(c1.assigned_to_id, 1)  # type:ignore
+        self.assertEqual(c1.created_by, User.objects.first())
