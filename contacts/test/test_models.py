@@ -34,3 +34,4 @@ class TestContactsTestCase(TestCase):
         self.assertEqual(c1.phone, "949160426")
         self.assertEqual(c1.assigned_to_id, 1)  # type:ignore
         self.assertEqual(c1.created_by, User.objects.first())
+        
