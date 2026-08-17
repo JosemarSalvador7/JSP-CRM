@@ -53,4 +53,4 @@ class Contact(models.Model):
     class Meta:
         verbose_name = "Contato"
         verbose_name_plural = "Contatos"
-        ordering = ["name"]  # Adicionado para ordenar por nome
+        ordering = ["name"]
